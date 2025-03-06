@@ -9,33 +9,9 @@
 .profile_form{
     width: 700px;
 }
-
-:root{
-    --primary-color: #1bd914; 
-    --background-color: #04770e; 
+.profile-wrapper{
+    height: 100%;
 }
-.green{
-    background-color: var(--primary-color);
-}
-.profile_main{
-    background-color: #ffffff;
-    padding: 20px;
-}
-.profile_email{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.farm_image{
- width: 60px;
- height: 60px;
-}
-.farm-edit{
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
 .profile_email .email h5{
     display: flex;
     flex-direction: column;
@@ -140,13 +116,12 @@
 
 /* media screens */
 @media screen and (max-width:768px) {
-    .green{
+   
+    .profile-wrapper{
         width: 100%;
+        height: 100%;
     }
-    .profile_main{
-        width: 100%;
-    }
-    .profile_main form{
+    .profile_form{
         width: 100%;
     }
 }

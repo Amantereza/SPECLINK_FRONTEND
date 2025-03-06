@@ -124,7 +124,7 @@ function Profile() {
 
   return (
     <>
-    <div className="container-fluid bg-white px-5">
+    <div className="container-fluid profile-wrapper bg-white px-5">
      <div className="profile d-flex mt-3">
       <div className="pic">
         <div className="pic_avater">

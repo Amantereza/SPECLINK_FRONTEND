@@ -1,11 +1,11 @@
 body {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(135deg, #f0f4f8, #e0eaf1); 
-    /* color: whitesmoke; */
+   
 }
 
 .navbar {
-    background: linear-gradient(135deg, #3498db, #6a11cb); /* Gradient navbar */
+    background: linear-gradient(135deg, #3498db, #6a11cb); 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .home_title{
