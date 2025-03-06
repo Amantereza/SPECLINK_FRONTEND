@@ -1,0 +1,111 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #f0f4f8, #e0eaf1); 
+    /* color: whitesmoke; */
+}
+
+.navbar {
+    background: linear-gradient(135deg, #3498db, #6a11cb); /* Gradient navbar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.home_title{
+    color: linear-gradient(rgba(115, 128, 234, 0.2));
+}
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    color: #fff !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #f0f4f8 !important;
+}
+
+.hero-section {
+    background: url('hero.png') no-repeat center center/cover;
+    padding: 100px 0;
+    color: #fff;
+    text-align: center;
+    position: relative;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Dark overlay */
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section .btn {
+    font-size: 1.1rem;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+}
+
+.service-cards .card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-cards .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.service-cards .card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.service-cards .card-text {
+    font-size: 1rem;
+    color: #666;
+}
+
+.service-cards .btn {
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.footer {
+    background: linear-gradient(135deg, #3498db, #6a11cb);
+    color: #fff;
+    padding: 30px 0;
+    margin-top: 60px;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 1rem;
+}

@@ -1,0 +1,21 @@
+.dash_header{
+    border-bottom: 1px solid #ddd;
+}
+.dash_row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+.dash_menu{
+    display: flex;
+    gap: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+.dash_menu .bi-people-fill{
+    font-size: 50px;
+}
+.dash_count{
+    font-size: 30px;
+}
