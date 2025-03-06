@@ -155,7 +155,7 @@ function ManagePatients() {
               {load ? (
                 <tr>
                   <td colSpan="7" className="text-center">
-                    <h6>Loading...</h6>
+                  <div class="loader"></div>
                   </td>
                 </tr>
               ) : users.length === 0 ? (

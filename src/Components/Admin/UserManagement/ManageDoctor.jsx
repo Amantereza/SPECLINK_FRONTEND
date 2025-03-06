@@ -133,12 +133,12 @@ function ManageDoctor() {
   
   return (
     <>
-      <div className="container-fluid px-5 p-2">
+      <div className="container-fluid doc_manage px-5 p-2">
         <h6>
           <strong>Manage Doctors</strong>
         </h6>
 
-        <div className="doctor_table bg-white p-2 col-lg-12 table-responsive mb-5">
+        <div className="doctor_table bg-white p-2 col-lg-12 col-sm-12 table-responsive">
           <table id="myTable" className="table table-striped table-hover table-bordered">
             <thead>
               <tr className="table-striped">
@@ -155,7 +155,7 @@ function ManageDoctor() {
               {load ? (
                 <tr>
                   <td colSpan="7" className="text-center">
-                    <h6>Loading...</h6>
+                  <div class="loader"></div>
                   </td>
                 </tr>
               ) : users.length === 0 ? (

@@ -66,7 +66,7 @@ function Content() {
             <i class="bi bi-people-fill"></i>
             <div className="text">
               <span className='dash_count'><strong>{doctors?.length}</strong></span>
-              <h4>Doctors</h4>
+              <h4 className='text-primary'>Doctors</h4>
             </div>
             </div>
 
@@ -74,7 +74,7 @@ function Content() {
             <i class="bi bi-people-fill"></i>
             <div className="text">
               <span className='dash_count'><strong>{patients?.length}</strong></span>
-              <h4>Patients</h4>
+              <h4 className='text-primary'>Patients</h4>
             </div>
               </div>
 
@@ -82,7 +82,7 @@ function Content() {
               <i class="bi bi-people-fill"></i>
             <div className="text">
               <span className='dash_count'><strong>{users?.length}</strong></span>
-              <h4>Total Users</h4>
+              <h4 className='text-primary'>Total Users</h4>
             </div>
               </div>
           </div>
@@ -94,7 +94,7 @@ function Content() {
         <h4><strong>User List</strong></h4>
         {users.length === 0 ? (<span>No users Available</span>) : (
           <>
-          {loader ? (<h6>loading...</h6>) : (
+          {loader ? ( <div class="loader"></div>) : (
             <>
              <table class="table table-striped table-hover table-bordered">
   <thead>
@@ -117,8 +117,8 @@ function Content() {
         <td>{first_name}</td>
       <td>{last_name}</td>
         <td>{email}</td>
-        <td><span>{is_doctor === false ? 'False' : 'True'}</span></td>
-        <td><span>{is_patient === false ? 'False' : 'True'}</span></td>
+        <td><span>{is_doctor === false ? (<i class="bi bi-x-circle-fill text-danger"></i>) : (<i class="bi bi-check-circle-fill text-success"></i>)}</span></td>
+        <td><span>{is_patient === false ? (<i class="bi bi-x-circle-fill text-danger"></i>) : (<i class="bi bi-check-circle-fill text-success"></i>)}</span></td>
     </tr>
         </>
       )

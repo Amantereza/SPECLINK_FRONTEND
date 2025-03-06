@@ -6,7 +6,6 @@ import Swal from 'sweetalert2'
 
 const register = 'https://speclink-backend.onrender.com/specLink/register';
 
-
 function Signup() {
     const navigate = useNavigate()
   const [patient, setPatient] = useState({
@@ -84,7 +83,7 @@ function Signup() {
       <div className="doctorregister bg-white  p-2 px-5">
         <h4 className='p-2 w-100 doc_reg_header'><strong>Doctor Registration</strong></h4>
         {error && <div className="alert alert-danger">{error}</div>}
-        <form onSubmit={handleSubmit} className='p-3'>
+        <form onSubmit={handleSubmit} className='doc_reg w-100 p-3'>
           <div className="mb-3">
             <label htmlFor="first_name" className="form-label">
               First Name
