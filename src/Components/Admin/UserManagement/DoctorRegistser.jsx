@@ -4,7 +4,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
-const register = 'http://127.0.0.1:8000/specLink/register';
+const register = 'https://speclink-backend.onrender.com/specLink/register';
+
 
 function Signup() {
     const navigate = useNavigate()

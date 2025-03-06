@@ -4,7 +4,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import {jwtDecode} from 'jwt-decode';  // Correct import, remove brackets
 
-const baseURL = 'https://agrilink-backend-hjzl.onrender.com/agriLink';
+const baseURL = 'https://speclink-backend.onrender.com/specLink/';
 
 const UseAxios = () => {
   const { setUser, authTokens, setAuthTokens } = useContext(AuthContext);
@@ -41,7 +41,7 @@ const UseAxios = () => {
 
     try {
       // Refresh the token if expired
-      const response = await axios.post("https://agrilink-backend-hjzl.onrender.com/api/token/refresh/", {
+      const response = await axios.post("https://speclink-backend.onrender.com/api/token/refresh/", {
         refresh: authTokens.refresh,
       });
 

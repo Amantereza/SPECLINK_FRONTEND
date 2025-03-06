@@ -5,7 +5,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import useHook from '../../CustomHook/useHook';
 
-const BASE_URL = 'http://127.0.0.1:8000/specLink/';
+const BASE_URL = 'https://speclink-backend.onrender.com/specLink/';
 
 function DoctorAppointments() {
   const {patientAppointments, appointLoader} = useHook()
@@ -14,7 +14,6 @@ function DoctorAppointments() {
   const CHANGE_STATUS_URL = `${BASE_URL}change_appointment_status`;
   const [statusLoaders, setStatusLoaders] = useState({});
  
-
   // Handle delete
   const handleDelete = async (id) => {
     try {

@@ -12,9 +12,9 @@ function Profile() {
   const {user} = useContext(AuthContext)
   const axiosInstance = UseAxios()
   const {profile,  previewImage, setPreviewImage, setProfile, SingleProfile} = useHook()
-  const userurl = `http://127.0.0.1:8000/specLink/single_user/${user.user_id}`
-  const update_user_url = `http://127.0.0.1:8000/specLink/update_user/${user?.user_id}`
-  const update_profile_url = `http://127.0.0.1:8000/specLink/EditProfile/${user?.user_id}`
+  const userurl = `https://speclink-backend.onrender.com/specLink/single_user/${user.user_id}`
+  const update_user_url = `https://speclink-backend.onrender.com/specLink/update_user/${user?.user_id}`
+  const update_profile_url = `https://speclink-backend.onrender.com/specLink/EditProfile/${user?.user_id}`
   const [showModal, setShowModal] = useState(false);
   const [dateFormat, setDateFormat] = useState();
   const [userData, setUserData] = useState({username:'',first_name:"", last_name:"", is_doctor:false, is_staff:true, is_patient:false, email:'', date_joined:''})
@@ -128,7 +128,7 @@ function Profile() {
      <div className="profile d-flex mt-3">
       <div className="pic">
         <div className="pic_avater">
-        <Avatar alt={userData.first_name} src={`${Image ? `http://127.0.0.1:8000${Image}` : `http://127.0.0.1:8000${previewImage}` }`}/>
+        <Avatar alt={userData.first_name} src={`${Image ? `https://speclink-backend.onrender.com/${Image}` : `https://speclink-backend.onrender.com/${previewImage}` }`}/>
         </div>
        
        <div className="pic_email">
@@ -224,7 +224,7 @@ function Profile() {
               
                   <div className="photo">
                     <span>Photo</span>
-                    <Avatar alt={userData.first_name} src={previewImage || `http://127.0.0.1:8000${profile.profile_picture}`}  className="profile" />
+                    <Avatar alt={userData.first_name} src={previewImage || `https://speclink-backend.onrender.com${profile.profile_picture}`}  className="profile" />
                   </div>
                   <div className="actions">
                   <input

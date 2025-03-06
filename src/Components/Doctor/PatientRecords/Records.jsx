@@ -6,7 +6,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import useHook from '../../CustomHook/useHook';
 
-const BASE_URL = 'http://127.0.0.1:8000/specLink/';
+const BASE_URL = 'https://speclink-backend.onrender.com/specLink/';
 const DELETE_RECORD_URL = `${BASE_URL}remove_records`;
 const CREATE_RECORD_URL = `${BASE_URL}post_medical_records`;
 const EDIT_RECORD_URL = `${BASE_URL}edit_record`;

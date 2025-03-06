@@ -6,9 +6,9 @@ import '../DashboardContet/dashboard.css'
 import axios from 'axios';
 import { AuthContext } from '../../../AuthContext/Context';
 
-const list_users = 'http://127.0.0.1:8000/specLink/list_doctors';
-const list_patients = 'http://127.0.0.1:8000/specLink/list_patients';
-const all_users = 'http://127.0.0.1:8000/specLink/list_users'
+const list_users = 'https://speclink-backend.onrender.com/specLink/list_doctors';
+const list_patients = 'https://speclink-backend.onrender.com/specLink/list_patients';
+const all_users = 'https://speclink-backend.onrender.com/specLink/list_users'
 
 function Content() {
   const {user} = useContext(AuthContext)

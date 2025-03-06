@@ -10,7 +10,7 @@ import 'datatables.net-bs4';
 
 import Swal from 'sweetalert2';
 
-const list_users = 'http://127.0.0.1:8000/specLink/list_patients';
+const list_users = 'https://speclink-backend.onrender.com/specLink/list_patients';
 function ManagePatients() {
     const [users, setUsers] = useState([]);
     const [load, setLoad] = useState(false);
@@ -57,7 +57,7 @@ function ManagePatients() {
 
   const handleDelete = (id, isUpdATING) => {
     try{
-        axios.delete(`http://127.0.0.1:8000/specLink/delete_user/${id}`)
+        axios.delete(`https://speclink-backend.onrender.com/specLink/delete_user/${id}`)
         setUsers(prev => prev.filter((user) => user.id !== id)); 
          Swal.fire({
             title: 'Doctor has been removed',
@@ -83,7 +83,7 @@ function ManagePatients() {
       );
   
       // Make the API call to toggle the active status
-      const response = await axios.patch(`http://127.0.0.1:8000/specLink/active_user/${id}`, {is_active:newStatus});
+      const response = await axios.patch(`https://speclink-backend.onrender.com/specLink/active_user/${id}`, {is_active:newStatus});
       
       if (response.status === 200) {
         // Update the user's is_active status in the state

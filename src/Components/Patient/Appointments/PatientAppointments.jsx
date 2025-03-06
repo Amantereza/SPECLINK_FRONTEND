@@ -4,7 +4,7 @@ import { AuthContext } from '../../AuthContext/Context';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const BASE_URL = 'http://127.0.0.1:8000/specLink/';
+const BASE_URL = 'https://speclink-backend.onrender.com/specLink/';
 const POST_APPOINTMENT_URL = `${BASE_URL}post_appointements`;
 const DOCTOR_LIST_URL = `${BASE_URL}list_doctors`;
 const DELETE_APPOINTMENTS_URL = `${BASE_URL}delete_appointments`;

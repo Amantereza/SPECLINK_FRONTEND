@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
-const register = 'http://127.0.0.1:8000/specLink/register';
+const register = 'https://speclink-backend.onrender.com/specLink/register';
 
 function Signup() {
     const navigate = useNavigate()
@@ -163,95 +163,6 @@ function Signup() {
 </div>
     </div>
    
-
-    {/* <div className="login_wrapper">
-    <div className="signup-container p-2 mt-5">
-      <h2>Create Account</h2>
-        {error && <div className="alert alert-danger">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="first_name" className="form-label">
-              First Name
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="first_name"
-              name="first_name"
-              value={patient.first_name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="last_name" className="form-label">
-              Last Name
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="last_name"
-              name="last_name"
-              value={patient.last_name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              name="email"
-              value={patient.email}
-              onChange={handleChange}
-              required
-            />
-            {userError && <p className='text-danger'>{userError}</p>}
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              name="password"
-              value={patient.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="confirm_password" className="form-label">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="confirm_password"
-              name="confirm_password"
-              value={patient.confirm_password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <button type="submit" className="login-button">
-        {load ? 'Registering....' : 'Sign up'}
-      </button>
-        </form>
-        <p>Have an account? <Link to='/login'>Login</Link></p>
-      </div>
-    </div> */}
     </>
   );
 }

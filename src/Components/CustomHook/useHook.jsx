@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../AuthContext/Context'
 import axios from 'axios'
 
-const BASE_URL = 'http://127.0.0.1:8000/specLink/';
+const BASE_URL = 'https://speclink-backend.onrender.com/specLink/';
 
 
 function useHook() {
     const {user} = useContext(AuthContext)
     const DOCTOR_APPOINTMENTS_URL = `${BASE_URL}doctor_appointments/${user?.user_id}`;
     const [profile, setProfile] = useState({user:user?.user_id, profile_picture:null, address:"",  specialization:"", license_number:""})
-    const userProfile = user && `http://127.0.0.1:8000/specLink/user_profile/${user?.user_id}`
+    const userProfile = user && `https://speclink-backend.onrender.com/specLink/user_profile/${user?.user_id}`
     const [previewImage, setPreviewImage] = useState(null);
     const [patientAppointments, setPatientAppointments] = useState([]);
     const [appointLoader, setAppointLoader] = useState(false);
