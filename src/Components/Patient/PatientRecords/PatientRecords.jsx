@@ -12,7 +12,7 @@ import '../PatientRecords/record.css'
 
 function PatientRecords() {
     const {user} = useContext(AuthContext)
-    const medical_records_list = `http://127.0.0.1:8000/specLink/patient_records/${user?.user_id}`
+    const medical_records_list = `https://speclink-backend.onrender.com/specLink/patient_records/${user?.user_id}`
 
     const [records, setRecords] = useState([])
     const [loader, setLoader] = useState(false)
