@@ -1,35 +1,59 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import '../DoctorDashboard/dashboard.css'
 import { Link } from 'react-router-dom'
 import Nav from '../DoctorNav/nav'
 import { AuthContext } from '../../AuthContext/Context'
 import useHook from '../../CustomHook/useHook'
+import axios from 'axios'
 
+const BASE_URL = 'https://speclink-backend.onrender.com/specLink/';
 
 function Dashboard() {
   const {user} = useContext(AuthContext)
   const {  patientAppointments, appointLoader} = useHook()
+   const [records, setRecords] = useState([]);
+   const LIST_RECORD_URL = `${BASE_URL}list_medical_records`;
+
+    // Fetch records
+  const fetchRecords = async () => {
+    try {
+      const response = await axios.get(LIST_RECORD_URL);
+      setRecords(response.data || []);
+    } catch (err) {
+      console.error('Error fetching records:', err);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    if (user?.user_id) fetchRecords();
+  }, [user?.user_id]);
+
   return (
     <>
    <Nav/>
     {/* Main Content */}
     <div className="container">
       <h4>Welcome, Dr. <strong>{user.first_name} {user.last_name}  👋</strong></h4>
-      <div className="dashboard-grid">
+      <div className="row doc_dash_row">
         {/* Assigned Patients Card */}
-        <div className="card blue lighten-4">
+        <div className="col-lg-5 col-md-5 col-sm-12 p-2 bg-white">
           <div className="card-content">
             <span className="card-title">Appointements</span>
             <p>View and manage your appointments.</p>
           </div>
+
+          <h4><strong>({patientAppointments?.length}) Appointments</strong></h4>
+
           <div className="card-action">
             <Link to='/doctor/appointments' className="modal-trigger">
               View Appointments
             </Link>
           </div>
         </div>
+
         {/* Chat with Patients Card */}
-        <div className="card green lighten-4">
+        <div className="col-lg-5 col-md-5 col-sm-12 p-2 bg-white">
           <div className="card-content">
             <span className="card-title">Chat with Patients</span>
             <p>Start a conversation with your patients.</p>
@@ -39,33 +63,51 @@ function Dashboard() {
           </div>
         </div>
         {/* Patient Records Card */}
-        <div className="card orange lighten-4">
+        <div className="col-lg-5 col-md-5 col-sm-12 p-2 bg-white mt-4 doc_dash_col">
           <div className="card-content">
             <span className="card-title">Patient Records</span>
             <p>Access and update patient medical records.</p>
           </div>
+          <h4><strong>({records?.length}) Records</strong></h4>
           <div className="card-action">
             <Link to='/doctor/patient_records'>Manage Records</Link>
           </div>
         </div>
         {/* Reports Card */}
-        <div className="card red lighten-4">
+        <div className="col-lg-5 col-md-5 col-sm-12 p-2 bg-white mt-4">
           <div className="card-content">
             <span className="card-title">Reports</span>
             <p>Generate and view patient reports.</p>
           </div>
+
+          <h4><strong>(4) Reports</strong></h4>
+
           <div className="card-action">
-            <a href="reportsd.html">View Reports</a>
+            <Link to='/doctor/reports'>View Reports</Link>
           </div>
         </div>
       </div>
       {/* Upcoming Appointments Table */}
-      <div className="section">
-        <h2>Upcoming Appointments</h2>
+      <div className="mt-4">
+        <div className="row">
+          <div className="col-lg-10 col-sm-12 d-flex appoint_col">
+        <h2><strong>Upcoming Appointments</strong></h2>
+        <Link to='/doctor/appointments'>
+        <span className='p-2 text-white bg-primary rounded show_all'>
+          <span>show all</span> 
+          <i class="bi bi-arrow-right"></i></span>
+        </Link>
+          </div>
+        </div>
 
         {patientAppointments.length === 0 ? (<h6>No appointments available</h6>) : (
           <>
-          {appointLoader ? (<h6>loading...</h6>) : (<>
+          {appointLoader ? (
+            <div>
+              <div className='loader'></div>
+              <p>Loading appointments...</p>
+            </div>
+          ) : (<>
             <div className="table-container table-responsive">
             <table>
           <thead>
@@ -91,18 +133,12 @@ function Dashboard() {
                   <td>{user.first_name} {user.last_name}</td>
                   <td>{formattedDate}</td>
                   <td>{time}</td>
-                  <td>{status}</td>
+                  <td><span className={`text-white p-1 rounded ${status === 'Cancelled' ? 'bg-danger' : status === 'Completed' ? 'bg-success' : 'bg-warning'}`}>{status}</span></td>
             </tr>
                 </>
                )
             })}
            
-            <tr>
-              <td>Jane Smith</td>
-              <td>Nov 20, 2023</td>
-              <td>02:00 PM</td>
-              <td>Pending</td>
-            </tr>
           </tbody>
         </table>
             </div>
@@ -112,23 +148,7 @@ function Dashboard() {
        
       </div>
     </div>
-    {/* Assigned Patients Modal */}
-    <div id="patientsModal" className="modal">
-      <div className="modal-content">
-        <h4>Assigned Patients</h4>
-        <ul className="collection">
-          <li className="collection-item">John Doe</li>
-          <li className="collection-item">Jane Smith</li>
-          <li className="collection-item">Alice Johnson</li>
-          <li className="collection-item">Michael Brown</li>
-        </ul>
-      </div>
-      <div className="modal-footer">
-        <a href="#!" className="modal-close btn blue">
-          Close
-        </a>
-      </div>
-    </div>
+    
     {/* Footer */}
     <footer className="footer">
       <div className="footer-content">

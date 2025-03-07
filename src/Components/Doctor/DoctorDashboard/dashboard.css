@@ -24,6 +24,29 @@ body {
     text-decoration: none;
 }
 
+.doc_dash_row{
+ display: flex;
+ flex: wrap;
+ gap: 30px;
+}
+.doc_dash_row > div{
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+    height: 200px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.appoint_col{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.doc_dash_row > div > h4{
+    color: green;
+}
+
 .doctor_navbar ul {
     display: flex;
     flex-direction: row;
@@ -127,4 +150,10 @@ th, td {
 th {
     background-color: #3498db;
     color: white;
+}
+
+@media screen and (max-width:768px) {
+   .show_all{
+  display: flex;
+   }
 }

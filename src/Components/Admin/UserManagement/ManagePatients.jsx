@@ -197,7 +197,7 @@ function ManagePatients() {
                       <td>
                         <Tooltip title="Delete">
                           <IconButton onClick={() => handleDelete(id)}>
-                            <DeleteIcon />
+                            <DeleteIcon color="error"/>
                           </IconButton>
                         </Tooltip>
                       </td>

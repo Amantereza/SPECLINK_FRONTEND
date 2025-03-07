@@ -43,6 +43,12 @@
     color: #f0f4f8;
 }
 
+/* record css */
+.record_row{
+    display: flex;
+    justify-content: center;
+}
+
 /* Footer Styles */
 .footer {
     background: linear-gradient(135deg, #3498db, #6a11cb);

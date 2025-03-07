@@ -1,10 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import '../DoctorDashboard/dashboard.css';
 import Nav from '../DoctorNav/nav';
 import { AuthContext } from '../../AuthContext/Context';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import useHook from '../../CustomHook/useHook';
+import '../PatientRecords/records.css';
+
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
 const BASE_URL = 'https://speclink-backend.onrender.com/specLink/';
 const DELETE_RECORD_URL = `${BASE_URL}remove_records`;
@@ -17,8 +22,13 @@ function Records() {
   const { patientAppointments } = useHook();
 
   const [records, setRecords] = useState([]);
+  const [tableKey, setTableKey] = useState(0);
+  const [searchTerm, setSearchTerm] = useState(''); // For search
+  const [currentPage, setCurrentPage] = useState(1); // For pagination
+  const [recordsPerPage] = useState(5); // Number of records per page
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' }); // For sorting
   const [createRecord, setCreateRecord] = useState({
-    user: '', // Patient ID from dropdown
+    user: '',
     diagnosis: '',
     treatment: '',
     date: '',
@@ -26,8 +36,8 @@ function Records() {
     dosage: '',
   });
   const [editRecord, setEditRecord] = useState({
-    id: '', // For URL only
-    user: '', // Patient ID from dropdown
+    id: '',
+    user: '',
     diagnosis: '',
     treatment: '',
     date: '',
@@ -37,6 +47,8 @@ function Records() {
   const [showModal, setShowModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadLoader, setUploadLoader] = useState(false);
+  const [editUploader, setEditUploader] = useState(false);
 
   // Fetch records
   const fetchRecords = async () => {
@@ -44,6 +56,7 @@ function Records() {
     try {
       const response = await axios.get(LIST_RECORD_URL);
       setRecords(response.data || []);
+      setTableKey((prev) => prev + 1);
     } catch (err) {
       console.error('Error fetching records:', err);
       Swal.fire({
@@ -66,9 +79,17 @@ function Records() {
   // Handle form submission for creating a record
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setUploadLoader(true);
     try {
       const response = await axios.post(CREATE_RECORD_URL, createRecord);
       if (response.status === 201) {
+        setRecords((prev) => {
+          const updatedRecords = [...prev, response.data];
+          console.log('Updated records in setRecords:', updatedRecords);
+          return updatedRecords;
+        });
+        setTableKey((prev) => prev + 1);
+        setUploadLoader(false);
         Swal.fire({
           title: 'Success',
           text: 'Record created successfully!',
@@ -80,17 +101,17 @@ function Records() {
         });
         setShowModal(false);
         setCreateRecord({
-          user: '', // Reset to empty for next selection
+          user: '',
           diagnosis: '',
           treatment: '',
           date: '',
           medication: '',
           dosage: '',
         });
-        fetchRecords();
       }
     } catch (err) {
       console.error('Error creating record:', err);
+      setUploadLoader(false);
       Swal.fire({
         title: 'Error',
         text: err.response?.data?.message || 'Failed to create record.',
@@ -122,7 +143,8 @@ function Records() {
           position: 'top',
           timerProgressBar: true,
         });
-        fetchRecords();
+        setRecords((prev) => prev.filter((record) => record.id !== id));
+        setTableKey((prev) => prev + 1);
       }
     } catch (err) {
       console.error('Error deleting record:', err);
@@ -140,10 +162,11 @@ function Records() {
   // Handle edit submission
   const handleEdit = async (e) => {
     e.preventDefault();
-    const { id, ...editPayload } = editRecord; // Exclude id from payload
+    setEditUploader(true);
+    const { id, ...editPayload } = editRecord;
     try {
       const response = await axios.put(`${EDIT_RECORD_URL}/${id}`, editPayload);
-      if (response.status === 200) {
+      if (response.status === 201) {
         Swal.fire({
           title: 'Success',
           text: 'Record updated successfully!',
@@ -166,6 +189,8 @@ function Records() {
         toast: true,
         position: 'top',
       });
+    } finally {
+      setEditUploader(false);
     }
   };
 
@@ -179,7 +204,7 @@ function Records() {
   const openEditModal = (record) => {
     setEditRecord({
       id: record.id,
-      user: record.user.id, // Use patient ID
+      user: record.user.id,
       diagnosis: record.diagnosis || '',
       treatment: record.treatment || '',
       date: record.date || '',
@@ -189,74 +214,173 @@ function Records() {
     setEditModal(true);
   };
 
+  // Search functionality
+  const filteredRecords = records.filter((record) =>
+    `${record.user.first_name} ${record.user.last_name}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
+  // Sorting functionality
+  const sortedRecords = [...filteredRecords].sort((a, b) => {
+    if (!sortConfig.key) return 0;
+    const aValue = sortConfig.key === 'date' ? new Date(a[sortConfig.key]) : `${a.user.first_name} ${a.user.last_name}`;
+    const bValue = sortConfig.key === 'date' ? new Date(b[sortConfig.key]) : `${b.user.first_name} ${b.user.last_name}`;
+    if (sortConfig.direction === 'asc') {
+      return aValue > bValue ? 1 : -1;
+    } else {
+      return aValue < bValue ? 1 : -1;
+    }
+  });
+
+  // Pagination logic
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = sortedRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(sortedRecords.length / recordsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Handle sorting
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+    setTableKey((prev) => prev + 1); // Force re-render
+  };
+
+
   return (
     <>
       <Nav />
       <div className="container-fluid">
-        <div className="record_header d-flex mt-2">
-          <h4>
-            <strong>Patient Records</strong>
-          </h4>
-          <button
-            className="btn btn-primary text-center text-white ms-auto"
-            onClick={() => setShowModal(true)}
-          >
-            Create Records
-          </button>
+        <div className="row record_row d-flex mt-2">
+          <div className="col-lg-10 record_header d-flex align-items-center">
+            <h4>
+              <strong>Patient Records</strong>
+            </h4>
+            <button
+              className="btn btn-primary text-center text-white ms-auto"
+              onClick={() => setShowModal(true)}
+            >
+              Create Records
+            </button>
+          </div>
         </div>
 
-        <div className="row">
-          <div className="col-lg-12 col-sm-12 table-container table-responsive">
+        {/* Search Input */}
+        <div className="row record_row mb-3 mt-3">
+          <div className="col-lg-10">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by patient name..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1); // Reset to first page on search
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="row record_row">
+          <div className="col-lg-10 col-sm-12 table-container table-responsive">
             {loading ? (
-              <p>Loading records...</p>
+              <div className="text-center">
+                <div className="loader" />
+                <p>Loading records...</p>
+              </div>
             ) : records.length === 0 ? (
-              <p>No records found.</p>
+              <p className="text-center">No records found.</p>
             ) : (
-              <table className="highlight">
-                <thead>
-                  <tr>
-                    <th>Patient</th>
-                    <th>Diagnosis</th>
-                    <th>Treatment</th>
-                    <th>Medication</th>
-                    <th>Last Visit Date</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {records.map((record) => {
-                    const dateObj = new Date(record.date);
-                    const formattedDate = dateObj.toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    });
-                    return (
-                      <tr key={record.id}>
-                        <td>{record.user.first_name} {record.user.last_name}</td>
-                        <td>{record.diagnosis}</td>
-                        <td>{record.treatment}</td>
-                        <td>{record.medication} ({record.dosage})</td>
-                        <td>{formattedDate}</td>
-                        <td>
-                          <button
-                            className="btn btn-danger btn-sm me-2"
-                            onClick={() => handleDelete(record.id)}
-                          >
-                            Delete
-                          </button>
-                          <button
-                            className="btn btn-warning btn-sm"
-                            onClick={() => openEditModal(record)}
-                          >
-                            Edit
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <>
+                <table
+                  key={tableKey}
+                  className="highlight table table-striped table-bordered"
+                >
+                  <thead>
+                    <tr>
+                      <th onClick={() => handleSort('user')}>
+                        Patient {sortConfig.key === 'user' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th>Diagnosis</th>
+                      <th>Treatment</th>
+                      <th>Medication</th>
+                      <th onClick={() => handleSort('date')}>
+                        Last Visit Date {sortConfig.key === 'date' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentRecords.map((record) => {
+                      const dateObj = new Date(record.date);
+                      const formattedDate = dateObj.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      });
+                      return (
+                        <tr key={record.id}>
+                          <td>
+                            {record.user.first_name} {record.user.last_name}
+                          </td>
+                          <td>{record.diagnosis}</td>
+                          <td>{record.treatment}</td>
+                          <td>
+                            {record.medication} ({record.dosage})
+                          </td>
+                          <td>{formattedDate}</td>
+                          <td>
+                            <Tooltip title="Delete">
+                              <IconButton onClick={() => handleDelete(record.id)}>
+                                <DeleteIcon color="error" />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Edit">
+                              <IconButton onClick={() => openEditModal(record)}>
+                                <EditIcon color="primary" />
+                              </IconButton>
+                            </Tooltip>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+
+                {/* Pagination Controls */}
+                <div className="d-flex justify-content-between mt-3">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </button>
+                  <div>
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <button
+                        key={i + 1}
+                        className={`btn ${currentPage === i + 1 ? 'btn-primary' : 'btn-outline-primary'} mx-1`}
+                        onClick={() => paginate(i + 1)}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                </div>
+              </>
             )}
           </div>
         </div>
@@ -268,7 +392,11 @@ function Records() {
           <div className="custom-modal">
             <div className="custom-modal-header">
               <h5 className="custom-modal-title">Create Record</h5>
-              <button type="button" className="close" onClick={() => setShowModal(false)}>
+              <button
+                type="button"
+                className="close"
+                onClick={() => setShowModal(false)}
+              >
                 ×
               </button>
             </div>
@@ -284,6 +412,7 @@ function Records() {
                     name="user"
                     onChange={handleChange}
                     value={createRecord.user}
+                    required
                   >
                     <option value="">Choose Patient</option>
                     {patientAppointments.map((patient) => (
@@ -293,7 +422,6 @@ function Records() {
                     ))}
                   </select>
                 </div>
-
                 <div className="mb-3">
                   <label htmlFor="diagnosis" className="form-label">
                     Diagnosis
@@ -305,9 +433,9 @@ function Records() {
                     name="diagnosis"
                     onChange={handleChange}
                     value={createRecord.diagnosis}
+                    required
                   />
                 </div>
-
                 <div className="mb-3">
                   <label htmlFor="treatment" className="form-label">
                     Treatment
@@ -318,9 +446,9 @@ function Records() {
                     name="treatment"
                     onChange={handleChange}
                     value={createRecord.treatment}
+                    required
                   />
                 </div>
-
                 <div className="mb-3">
                   <label htmlFor="date" className="form-label">
                     Date
@@ -332,9 +460,9 @@ function Records() {
                     name="date"
                     onChange={handleChange}
                     value={createRecord.date}
+                    required
                   />
                 </div>
-
                 <div className="mb-3">
                   <label htmlFor="medication" className="form-label">
                     Medication
@@ -346,9 +474,9 @@ function Records() {
                     name="medication"
                     onChange={handleChange}
                     value={createRecord.medication}
+                    required
                   />
                 </div>
-
                 <div className="mb-3">
                   <label htmlFor="dosage" className="form-label">
                     Dosage
@@ -360,11 +488,11 @@ function Records() {
                     name="dosage"
                     onChange={handleChange}
                     value={createRecord.dosage}
+                    required
                   />
                 </div>
-
-                <button type="submit" className="btn btn-primary">
-                  Submit
+                <button type="submit" className="btn btn-primary" disabled={uploadLoader}>
+                  {uploadLoader ? 'Submitting...' : 'Submit'}
                 </button>
               </form>
             </div>
@@ -378,7 +506,11 @@ function Records() {
           <div className="custom-modal">
             <div className="custom-modal-header">
               <h5 className="custom-modal-title">Edit Record</h5>
-              <button type="button" className="close" onClick={() => setEditModal(false)}>
+              <button
+                type="button"
+                className="close"
+                onClick={() => setEditModal(false)}
+              >
                 ×
               </button>
             </div>
@@ -394,6 +526,7 @@ function Records() {
                     name="user"
                     onChange={handleEditChange}
                     value={editRecord.user}
+                    required
                   >
                     <option value="">Choose Patient</option>
                     {patientAppointments.map((patient) => (
@@ -403,7 +536,6 @@ function Records() {
                     ))}
                   </select>
                 </div>
-
                 <div className="mb-3">
                   <label htmlFor="edit-diagnosis" className="form-label">
                     Diagnosis
@@ -415,9 +547,9 @@ function Records() {
                     name="diagnosis"
                     onChange={handleEditChange}
                     value={editRecord.diagnosis}
+                    required
                   />
                 </div>
-
                 <div className="mb-3">
                   <label htmlFor="edit-treatment" className="form-label">
                     Treatment
@@ -428,9 +560,9 @@ function Records() {
                     name="treatment"
                     onChange={handleEditChange}
                     value={editRecord.treatment}
+                    required
                   />
                 </div>
-
                 <div className="mb-3">
                   <label htmlFor="edit-date" className="form-label">
                     Date
@@ -442,9 +574,9 @@ function Records() {
                     name="date"
                     onChange={handleEditChange}
                     value={editRecord.date}
+                    required
                   />
                 </div>
-
                 <div className="mb-3">
                   <label htmlFor="edit-medication" className="form-label">
                     Medication
@@ -456,9 +588,9 @@ function Records() {
                     name="medication"
                     onChange={handleEditChange}
                     value={editRecord.medication}
+                    required
                   />
                 </div>
-
                 <div className="mb-3">
                   <label htmlFor="edit-dosage" className="form-label">
                     Dosage
@@ -470,11 +602,11 @@ function Records() {
                     name="dosage"
                     onChange={handleEditChange}
                     value={editRecord.dosage}
+                    required
                   />
                 </div>
-
-                <button type="submit" className="btn btn-primary">
-                  Update
+                <button type="submit" className="btn btn-primary" disabled={editUploader}>
+                  {editUploader ? 'Updating...' : 'Update'}
                 </button>
               </form>
             </div>

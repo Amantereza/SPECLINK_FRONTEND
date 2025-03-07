@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
@@ -197,7 +197,7 @@ function ManageDoctor() {
                       <td>
                         <Tooltip title="Delete">
                           <IconButton onClick={() => handleDelete(id)}>
-                            <DeleteIcon />
+                            <DeleteIcon color='error'/>
                           </IconButton>
                         </Tooltip>
                       </td>

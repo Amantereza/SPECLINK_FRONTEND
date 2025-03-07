@@ -5,10 +5,18 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import useHook from '../../CustomHook/useHook';
 
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+
+import $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs4';
+
 const BASE_URL = 'https://speclink-backend.onrender.com/specLink/';
 
 function DoctorAppointments() {
-  const {patientAppointments, appointLoader, fetchAppointments} = useHook()
+  const {patientAppointments, appointLoader, fetchAppointments, setPatientAppointments} = useHook()
   const { user } = useContext(AuthContext);
   const DELETE_APPOINTMENT_URL = `${BASE_URL}delete_appointments`;
   const CHANGE_STATUS_URL = `${BASE_URL}change_appointment_status`;
@@ -29,7 +37,10 @@ function DoctorAppointments() {
           timerProgressBar: true,
           showConfirmButton: false,
         });
-        fetchAppointments(); // Refresh list
+       setPatientAppointments((prev) =>
+       prev.filter(appoint => appoint.id !== id)
+      )
+      
       }
     } catch (err) {
       console.error('Error deleting appointment:', err);
@@ -62,7 +73,12 @@ function DoctorAppointments() {
           timerProgressBar: true,
           showConfirmButton: false,
         });
-        fetchAppointments(); // Refresh list
+      
+        setPatientAppointments((prev) =>
+        prev.map(appoint =>(
+          appoint.id === id ? {...appoint, status:newStatus} : appoint
+        ))
+        )
       }
     } catch (err) {
       console.error('Error changing status:', err);
@@ -79,6 +95,30 @@ function DoctorAppointments() {
     }
   };
 
+  
+  useEffect(() => {
+    if (patientAppointments.length > 0) {
+      const tableId = '#myTable';
+
+      // Destroy existing DataTable if it exists
+      if ($.fn.DataTable.isDataTable(tableId)) {
+        $(tableId).DataTable().destroy();
+      }
+
+      // Initialize DataTable
+      $(tableId).DataTable({
+        destroy: true, 
+      });
+    }
+
+    // Cleanup DataTable on component unmount
+    return () => {
+      if ($.fn.DataTable.isDataTable('#myTable')) {
+        $('#myTable').DataTable().destroy();
+      }
+    };
+  }, [patientAppointments]);
+
   return (
     <>
       <Nav />
@@ -89,12 +129,15 @@ function DoctorAppointments() {
 
         <div className="row">
           {appointLoader ? (
-            <h6>Loading...</h6>
+            <div>
+              <div className='loader'></div>
+              <h6 className='text-center'>Loading appointments...</h6>
+            </div>
           ) : patientAppointments.length === 0 ? (
             <h6>No Appointments</h6>
           ) : (
             <div className="col-lg-12 col-sm-12 table-container table-responsive">
-              <table className="highlight responsive-table">
+              <table id='myTable' className="highlight responsive-table">
                 <thead>
                   <tr>
                     <th>Patient</th>
@@ -140,7 +183,7 @@ function DoctorAppointments() {
                             </span>
                           )}
                         </td>
-                        <td>
+                        <td className='d-flex'>
                           <div className="dropdown ms-4">
                             <button
                               className="btn border dropdown-toggle"
@@ -176,12 +219,11 @@ function DoctorAppointments() {
                               </button>
                             </div>
                           </div>
-                          <button
-                            className="btn btn-danger btn-sm ms-2"
-                            onClick={() => handleDelete(id)}
-                          >
-                            Delete
-                          </button>
+                          <Tooltip title="Delete">
+                          <IconButton onClick={() => handleDelete(id)}>
+                            <DeleteIcon color="error"/>
+                          </IconButton>
+                        </Tooltip>
                         </td>
                       </tr>
                     );
