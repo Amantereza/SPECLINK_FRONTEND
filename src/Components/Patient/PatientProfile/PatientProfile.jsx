@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import '../Profile/profile.css';
+import '../../Admin/Profile/profile.css'
 import { Avatar } from '@mui/material';
 import useHook from '../../CustomHook/useHook';
 import { AuthContext } from '../../AuthContext/Context';
@@ -7,8 +7,11 @@ import axios from 'axios';
 import moment from 'moment';
 import UseAxios from '../../UseAxios/Token';
 import Swal from 'sweetalert2';
+import Nav from '../../Doctor/DoctorNav/nav';
 
-function Profile() {
+import '../../Doctor/DoctorProfile/docProfile.css'
+
+function PatientProfile() {
   const { user } = useContext(AuthContext);
   const axiosInstance = UseAxios();
   const { profile, previewImage, setPreviewImage, setProfile, SingleProfile } = useHook();
@@ -68,6 +71,13 @@ function Profile() {
       setPreviewImage(URL.createObjectURL(selectedImage));
     }
   };
+
+//   handle profiel
+const handleProfile = (e)=>{
+    setProfile({
+        ...profile, [e.target.name]: e.target.value
+    })
+}
 
   // Handle user input change
   const handleUser = (e) => {
@@ -144,8 +154,10 @@ function Profile() {
 
   return (
     <>
-      <div className="container-fluid profile-wrapper bg-white px-5">
-        <div className="profile d-flex mt-3">
+    <Nav/>
+      <div className="container-fluid bg-white p-4">
+        <div className="user_profile_wrapper ">
+        <div className="profile user_prof d-flex mt-3 p-2">
           <div className="pic">
             <div className="pic_avater">
               <Avatar
@@ -235,7 +247,23 @@ function Profile() {
               readOnly
             />
           </div>
+
+          <div className="mb-3">
+            <label htmlFor="dateJoined" className="form-label">
+             Date of Birth
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              id="dateJoined"
+              value={profile.date_of_birth}
+              placeholder='date.....'
+              readOnly
+            />
+          </div>
         </form>
+        </div>
+       
       </div>
 
       {/* Update Profile Modal */}
@@ -342,6 +370,21 @@ function Profile() {
                   />
                 </div>
 
+                <div className="mb-3">
+                  <label htmlFor="lastName" className="form-label">
+                    Date of Birth
+                  </label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="lastName"
+                    name="date_of_birth"
+                    value={profile.date_of_birth}
+                    onChange={handleProfile}
+                    placeholder="Enter date of birth..."
+                  />
+                </div>
+
                 <button type="submit" className="update_profile btn btn-primary" disabled={update}>
                   {update ? 'Updating...' : 'Update'}
                 </button>
@@ -354,4 +397,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default PatientProfile;

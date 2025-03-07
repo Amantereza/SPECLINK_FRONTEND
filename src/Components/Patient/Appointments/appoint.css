@@ -1,0 +1,7 @@
+.appoint_header{
+  border-bottom: 1px solid #ddd;
+}
+.appoint_row{
+    display: flex;
+    justify-content: center;
+}

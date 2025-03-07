@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import '../Dashboard/dashboard.css'
 import Nav from '../../Doctor/DoctorNav/nav'
 import { AuthContext } from '../../AuthContext/Context'
+import { Link } from 'react-router-dom'
 
 function PatientDashboard() {
   const {user} = useContext(AuthContext)
@@ -19,7 +20,7 @@ function PatientDashboard() {
           <p>View your medical history and prescriptions.</p>
         </div>
         <div className="card-action">
-          <a href="Medical_records.html">View Records</a>
+          <Link to='/patient/records'>View Records</Link>
         </div>
       </div>
       <div className="card orange lighten-4">

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import '../Profile/profile.css';
+import '../../Admin/Profile/profile.css'
 import { Avatar } from '@mui/material';
 import useHook from '../../CustomHook/useHook';
 import { AuthContext } from '../../AuthContext/Context';
@@ -7,8 +7,11 @@ import axios from 'axios';
 import moment from 'moment';
 import UseAxios from '../../UseAxios/Token';
 import Swal from 'sweetalert2';
+import Nav from '../DoctorNav/nav';
 
-function Profile() {
+import '../DoctorProfile/docProfile.css'
+
+function DoctorProfile() {
   const { user } = useContext(AuthContext);
   const axiosInstance = UseAxios();
   const { profile, previewImage, setPreviewImage, setProfile, SingleProfile } = useHook();
@@ -69,6 +72,13 @@ function Profile() {
     }
   };
 
+//   handle profiel
+const handleProfile = (e)=>{
+    setProfile({
+        ...profile, [e.target.name]: e.target.value
+    })
+}
+
   // Handle user input change
   const handleUser = (e) => {
     setUserData({
@@ -97,9 +107,9 @@ function Profile() {
 
     // Append profile data
     profileFormData.append('address', profile.address || '');
-    profileFormData.append('specialization', profile.specialization || '');
+    profileFormData.append('specialization', profile.specialization);
     // profileFormData.append('license_number', profile.license_number || '');
-    profileFormData.append('years_of_experience', profile.years_of_experience || 0)
+    profileFormData.append('years_of_experience', profile.years_of_experience)
     profileFormData.append('date_of_birth', profile.date_of_birth || '')
 
     // Append profile_picture only if it’s a File object (new upload)
@@ -144,8 +154,10 @@ function Profile() {
 
   return (
     <>
-      <div className="container-fluid profile-wrapper bg-white px-5">
-        <div className="profile d-flex mt-3">
+    <Nav/>
+      <div className="container-fluid bg-white p-4">
+        <div className="user_profile_wrapper ">
+        <div className="profile user_prof d-flex mt-3 p-2">
           <div className="pic">
             <div className="pic_avater">
               <Avatar
@@ -235,7 +247,37 @@ function Profile() {
               readOnly
             />
           </div>
+
+          <div className="mb-3">
+            <label htmlFor="dateJoined" className="form-label">
+              Specializations
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="dateJoined"
+              value={profile.specialization}
+              placeholder='specialization....'
+              readOnly
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="dateJoined" className="form-label">
+             Years of Experience
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="dateJoined"
+              value={profile.years_of_experience}
+              placeholder='experience.....'
+              readOnly
+            />
+          </div>
         </form>
+        </div>
+       
       </div>
 
       {/* Update Profile Modal */}
@@ -342,6 +384,36 @@ function Profile() {
                   />
                 </div>
 
+                <div className="mb-3">
+                  <label htmlFor="lastName" className="form-label">
+                    specialization
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="lastName"
+                    name="specialization"
+                    value={profile.specialization}
+                    onChange={handleProfile}
+                    placeholder="Enter last name..."
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="lastName" className="form-label">
+                    years of experience
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="lastName"
+                    name="years_of_experience"
+                    value={profile.years_of_experience}
+                    onChange={handleProfile}
+                    placeholder="Enter last name..."
+                  />
+                </div>
+
                 <button type="submit" className="update_profile btn btn-primary" disabled={update}>
                   {update ? 'Updating...' : 'Update'}
                 </button>
@@ -354,4 +426,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default DoctorProfile;

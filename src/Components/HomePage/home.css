@@ -26,14 +26,93 @@ body {
     color: #f0f4f8 !important;
 }
 
-.hero-section {
-    background: url('hero.png') no-repeat center center/cover;
-    padding: 100px 0;
-    color: #fff;
-    text-align: center;
-    position: relative;
+/* main css */
+.main {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../Images/doctor.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 65px; /* Assuming this offsets a fixed navbar */
 }
 
+.main_text {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: #ffffff; /* Base color for text, overridden by gradient where applied */
+    padding: 20px;
+    max-width: 800px; /* Limits text width for readability */
+}
+
+.main_title {
+    background: linear-gradient(to right, #ff69b4, #800080, #4169e1, #ffff00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    font-size: 3.5rem; /* Larger, professional size */
+    font-weight: 700; /* Bold for emphasis */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow for readability */
+    margin-bottom: 1rem; /* Spacing below title */
+}
+
+.main_text p {
+    background: linear-gradient(to right, rgb(13, 14, 13), rgb(11, 48, 4), rgb(116, 247, 90), yellow);
+    -webkit-background-clip: text; 
+    background-clip: text; 
+    color: transparent; 
+    display: inline-block;
+    font-size: 1.25rem; /* Professional, readable size */
+    
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3); /* Shadow for contrast */
+    line-height: 1.6; 
+    margin: 0; 
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .main_title {
+        font-size: 2.5rem; /* Smaller on tablets */
+    }
+    .main_text p {
+        font-size: 1rem; /* Smaller paragraph text */
+    }
+    .main_text {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main_title {
+        font-size: 1.75rem; /* Even smaller on phones */
+    }
+    .main_text p {
+        font-size: 0.9rem;
+    }
+    .main {
+        margin-top: 56px; /* Adjust for smaller navbar on mobile */
+    }
+}
+
+/* end main css */
+
+
+/* logins */
+.main-logins{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.main-logins > div{
+    background-color: #ffff;
+    padding: 10px;
+    border-radius: 10px;
+}
 .hero-section::before {
     content: '';
     position: absolute;
@@ -86,16 +165,10 @@ body {
     margin-bottom: 15px;
 }
 
-.service-cards .card-text {
+ .card-text {
     font-size: 1rem;
+    
     color: #666;
-}
-
-.service-cards .btn {
-    font-size: 1rem;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 500;
 }
 
 .footer {
@@ -108,4 +181,14 @@ body {
 .footer p {
     margin: 0;
     font-size: 1rem;
+}
+
+@media screen and (max-width:786px) {
+    .container.service-cards{
+        width: 100%;
+    }
+    .log-col .card{
+        width: 100%;
+
+    }
 }

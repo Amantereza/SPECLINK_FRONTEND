@@ -8,7 +8,7 @@ const BASE_URL = 'https://speclink-backend.onrender.com/specLink/';
 function useHook() {
     const {user} = useContext(AuthContext)
     const DOCTOR_APPOINTMENTS_URL = `${BASE_URL}doctor_appointments/${user?.user_id}`;
-    const [profile, setProfile] = useState({user:user?.user_id, profile_picture:null, address:"",  specialization:"", license_number:""})
+    const [profile, setProfile] = useState({user:user?.user_id, profile_picture:null, address:"",  specialization:"", years_of_experience:0, date_of_birth:""})
     const userProfile = user && `https://speclink-backend.onrender.com/specLink/user_profile/${user?.user_id}`
     const [previewImage, setPreviewImage] = useState(null);
     const [patientAppointments, setPatientAppointments] = useState([]);
@@ -18,8 +18,7 @@ function useHook() {
         try{
            const response = await axios.get(userProfile)
            const data = response.data
-           console.log(data)
-           setProfile(data)
+           setProfile(data.profile)
            setPreviewImage(data.profile.profile_picture)
         }catch(err){
             console.log(err)
@@ -65,7 +64,8 @@ function useHook() {
     patientAppointments, 
     setPatientAppointments,
     appointLoader, 
-    setAppointLoader
+    setAppointLoader,
+    fetchAppointments
   }
 }
 

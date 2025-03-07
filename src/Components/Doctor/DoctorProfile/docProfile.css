@@ -1,0 +1,8 @@
+.user_profile_wrapper{
+    width: 800px;
+    margin: auto;
+}
+
+.user_prof{
+    border-bottom: 1px solid #ccc;
+}

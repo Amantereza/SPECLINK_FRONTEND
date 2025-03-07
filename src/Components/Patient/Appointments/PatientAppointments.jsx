@@ -3,6 +3,11 @@ import Nav from '../../Doctor/DoctorNav/nav';
 import { AuthContext } from '../../AuthContext/Context';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs4';
+
+import '../Appointments/appoint.css'
 
 const BASE_URL = 'https://speclink-backend.onrender.com/specLink/';
 const POST_APPOINTMENT_URL = `${BASE_URL}post_appointements`;
@@ -206,24 +211,54 @@ function PatientAppointments() {
     setEditModal(true);
   };
 
+  useEffect(() => {
+    if (appointments.length > 0) {
+      const tableId = '#myTable';
+
+      // Destroy existing DataTable if it exists
+      if ($.fn.DataTable.isDataTable(tableId)) {
+        $(tableId).DataTable().destroy();
+      }
+
+      // Initialize DataTable
+      $(tableId).DataTable({
+        destroy: true, 
+      });
+    }
+
+    // Cleanup DataTable on component unmount
+    return () => {
+      if ($.fn.DataTable.isDataTable('#myTable')) {
+        $('#myTable').DataTable().destroy();
+      }
+    };
+  }, [appointments]);
+
   return (
     <>
       <Nav />
       <div className="appoint-wrapper">
-        <div className="appoint_header d-flex mt-3">
+        <div className="appoint_header d-flex mt-3 row justify-content-center">
+          <div className="col-lg-9 p-2 d-flex appoint_header">
           <h4>
             <strong>Appointments</strong>
           </h4>
           <button className="btn btn-primary ms-auto" onClick={() => setShowModal(true)}>
             Create Appointment
           </button>
+          </div>
+          
         </div>
-
-        <div className="col-lg-10 table-responsive">
+        <div className="row appoint_row">
+        <div className="col-lg-10 table-responsive bg-white p-2 mt-3">
           {appointmentLoad ? (
-            <p>Loading appointments...</p>
+            <div className='text-center'>
+              <div  className='loader'></div>
+              <p>Looading appointments...</p>
+            </div>
+           
           ) : (
-            <table className="table table-hover table-bordered table-striped highlight">
+            <table id="myTable" className="table table-hover table-bordered table-striped highlight">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -272,6 +307,8 @@ function PatientAppointments() {
             </table>
           )}
         </div>
+        </div>
+        
       </div>
 
       {/* Create Appointment Modal */}

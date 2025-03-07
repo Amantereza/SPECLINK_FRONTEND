@@ -8,7 +8,7 @@ import useHook from '../../CustomHook/useHook';
 const BASE_URL = 'https://speclink-backend.onrender.com/specLink/';
 
 function DoctorAppointments() {
-  const {patientAppointments, appointLoader} = useHook()
+  const {patientAppointments, appointLoader, fetchAppointments} = useHook()
   const { user } = useContext(AuthContext);
   const DELETE_APPOINTMENT_URL = `${BASE_URL}delete_appointments`;
   const CHANGE_STATUS_URL = `${BASE_URL}change_appointment_status`;
@@ -49,7 +49,9 @@ function DoctorAppointments() {
     setStatusLoaders((prev) => ({ ...prev, [id]: true }));
     try {
       const response = await axios.patch(`${CHANGE_STATUS_URL}/${id}`, { status: newStatus });
+      
       if (response.status === 200) {
+        console.log(response)
         Swal.fire({
           title: 'Success',
           text: `Status updated to ${newStatus}!`,

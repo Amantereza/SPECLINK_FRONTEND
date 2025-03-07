@@ -18,6 +18,9 @@ import './App.css'
 import DoctorAppointments from './Components/Doctor/DoctorAppointments/DoctorAppointments';
 import PatientDashboard from './Components/Patient/Dashboard/PatientDashboard';
 import PatientAppointments from './Components/Patient/Appointments/PatientAppointments';
+import DoctorProfile from './Components/Doctor/DoctorProfile/DoctorProfile';
+import PatientProfile from './Components/Patient/PatientProfile/PatientProfile';
+import PatientRecords from './Components/Patient/PatientRecords/PatientRecords';
 
 function App() {
   return (
@@ -45,6 +48,7 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} /> 
             <Route path="patient_records" element={<Records />} /> 
             <Route path='appointments' element={<DoctorAppointments/>}/>
+            <Route path='profile' element={<DoctorProfile/>}/>
             <Route path="logout" element={<Logout />} />
             </Routes>
               </div>
@@ -58,7 +62,8 @@ function App() {
             <Routes>
             <Route path="dashboard" element={<PatientDashboard/>} /> 
             <Route path="patient_appointments" element={<PatientAppointments/>} /> 
-            {/* <Route path='appointments' element={<DoctorAppointments/>}/> */}
+            <Route path='records' element={<PatientRecords/>}/> 
+            <Route path='profile' element={<PatientProfile/>}/>
             <Route path="logout" element={<Logout />} />
             </Routes>
               </div>
