@@ -16,7 +16,7 @@ import 'datatables.net-bs4';
 const BASE_URL = 'https://speclink-backend.onrender.com/specLink/';
 
 function DoctorAppointments() {
-  const {patientAppointments, appointLoader, fetchAppointments, setPatientAppointments} = useHook()
+  const {patientAppointments, appointLoader, setPatientAppointments} = useHook()
   const { user } = useContext(AuthContext);
   const DELETE_APPOINTMENT_URL = `${BASE_URL}delete_appointments`;
   const CHANGE_STATUS_URL = `${BASE_URL}change_appointment_status`;
@@ -167,9 +167,9 @@ function DoctorAppointments() {
                         <td>
                           {statusLoaders[id] ? (
                             <div className="orderloader">Loading...</div>
-                          ) : status === 'Completed' ? (
+                          ) : status === 'Approved' ? (
                             <span className="text-success d-flex">
-                              <i className="bi bi-check2-circle"></i> Completed
+                              <i className="bi bi-check2-circle"></i> Approved
                             </span>
                           ) : status === 'Cancelled' ? (
                             <span className="text-danger">Cancelled</span>
@@ -207,9 +207,9 @@ function DoctorAppointments() {
                               </button>
                               <button
                                 className="dropdown-item"
-                                onClick={() => changeStatus(id, 'Completed')}
+                                onClick={() => changeStatus(id, 'Approved')}
                               >
-                                Completed
+                                Approved
                               </button>
                               <button
                                 className="dropdown-item"

@@ -1,0 +1,34 @@
+.report_wrapper{
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+}
+.monthly_stats{
+    display: flex;
+    justify-content: center;
+}
+.report_st_row{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.report_st_row > div{
+    display: flex;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+}
+.report_st_span{
+    font-weight: bolder;
+    font-size: 30px;
+}
+.report_nd_row{
+    display: flex;
+    justify-content: center;
+}
+.report_rd_row{
+    display: flex;
+    justify-content: center;
+}
