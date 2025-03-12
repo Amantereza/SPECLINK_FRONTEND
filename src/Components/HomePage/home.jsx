@@ -1,83 +1,416 @@
 import React from 'react';
 import '../HomePage/home.css';
+import '../HomePage/home2.css';
+import { useEffect, useState } from "react"
 import { Link } from 'react-router-dom';
+import { motion} from "framer-motion";
+import { Star, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import image1 from '../Images/doctor.png'
+
 
 function Home() {
+
+  const [activeTestimonial, setActiveTestimonial] = useState(0)
+  const [isVisible, setIsVisible] = useState({
+    doctors: false,
+    testimonials: false,
+    sponsors: false,
+  })
+
+   // Animation observer
+   useEffect(() => {
+    const observerOptions = {
+      threshold: 0.2,
+      rootMargin: "0px 0px -100px 0px",
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setIsVisible((prev) => ({
+            ...prev,
+            [entry.target.id]: true,
+          }))
+        }
+      })
+    }, observerOptions)
+
+    const sections = ["doctors", "testimonials", "sponsors"]
+    sections.forEach((section) => {
+      const element = document.getElementById(section)
+      if (element) observer.observe(element)
+    })
+
+    return () => {
+      sections.forEach((section) => {
+        const element = document.getElementById(section)
+        if (element) observer.unobserve(element)
+      })
+    }
+  }, [])
+
+  // Doctors data
+  const doctors = [
+    {
+      id: 1,
+      name: "Dr. Sarah Johnson",
+      specialty: "Cardiology",
+      experience: "15+ years",
+      image: "/placeholder.svg?height=300&width=300",
+      rating: 4.9,
+    },
+    {
+      id: 2,
+      name: "Dr. Michael Chen",
+      specialty: "Neurology",
+      experience: "12+ years",
+      image: "/placeholder.svg?height=300&width=300",
+      rating: 4.8,
+    },
+    {
+      id: 3,
+      name: "Dr. Emily Rodriguez",
+      specialty: "Pediatrics",
+      experience: "10+ years",
+      image: "/placeholder.svg?height=300&width=300",
+      rating: 4.7,
+    },
+    {
+      id: 4,
+      name: "Dr. James Wilson",
+      specialty: "Orthopedics",
+      experience: "18+ years",
+      image: "/placeholder.svg?height=300&width=300",
+      rating: 4.9,
+    },
+  ]
+
+  // Testimonials data
+  const testimonials = [
+    {
+      id: 1,
+      name: "Jennifer L.",
+      text: "Spec-Link transformed my healthcare experience. The doctors are professional and the appointment system is seamless.",
+      image: "/placeholder.svg?height=100&width=100",
+      rating: 5,
+    },
+    {
+      id: 2,
+      name: "Robert M.",
+      text: "I've been using Spec-Link for my family's healthcare needs for over a year now. The convenience and quality of care is unmatched.",
+      image: "/placeholder.svg?height=100&width=100",
+      rating: 5,
+    },
+    {
+      id: 3,
+      name: "Sophia K.",
+      text: "The specialists at Spec-Link diagnosed my condition when other doctors couldn't. I'm forever grateful for their expertise.",
+      image: "/placeholder.svg?height=100&width=100",
+      rating: 4,
+    },
+  ]
+
+  // Sponsors data
+  const sponsors = [
+    { id: 1, name: "MediTech Solutions", logo: "/placeholder.svg?height=80&width=180" },
+    { id: 2, name: "HealthPlus", logo: "/placeholder.svg?height=80&width=180" },
+    { id: 3, name: "CarePlus Insurance", logo: "/placeholder.svg?height=80&width=180" },
+    { id: 4, name: "PharmaDirect", logo: "/placeholder.svg?height=80&width=180" },
+    { id: 5, name: "MedEquip Innovations", logo: "/placeholder.svg?height=80&width=180" },
+  ]
+
+  const nextTestimonial = () => {
+    setActiveTestimonial((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))
+  }
+
+  const prevTestimonial = () => {
+    setActiveTestimonial((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))
+  }
+
+
   return (
+
     <>
       {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div>
+      <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div className="container">
           <a className="navbar-brand fw-bold" href="#">
             SPEC-LINK
           </a>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav ms-auto">
+              <li className="nav-item">
+                <a className="nav-link" href="#home">
+                  Home
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#doctors">
+                  Doctors
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#testimonials">
+                  Testimonials
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#contact">
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <div className="main">
-        <div className="main_text">
-          <h1 className='main_title'>
-           <strong>Welcome to Spec-Link</strong>
-          </h1>
-          <p>
-            An easy-to-use system for managing your healthcare, appointments,
-            and doctor interactions.
-          </p>
+ {/* Hero Section */}
+ <div className="hero-section" id="home">
+        <div className="hero-content">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="hero-title"
+          >
+            Welcome to Spec-Link
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="hero-subtitle"
+          >
+            Advanced healthcare management for patients and professionals
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="hero-buttons"
+          >
+            <Link to="/login" className="btn btn-primary btn-lg me-3">
+              Get Started
+            </Link>
+            <Link to="/services" className="btn btn-outline-light btn-lg">
+              Our Services
+            </Link>
+          </motion.div>
         </div>
       </div>
 
-      {/* Service Cards */}
-      <div className="row main-logins mt-4 p-3">
-            <div className="col-lg-3 col-md-3 col-sm-12">
-                <h3 className="card-title h5 fw-bold mb-3">
-                  Patient Management
-                </h3>
-                <p className="card-text mb-4">
-                  Patients can log in, view their appointments, and book new
-                  consultations with doctors.
-                </p>
-                <Link to="/login" className="btn btn-primary mt-auto">
-                  Login Here
-                </Link>
-              
-            </div>
-            <div className="col-lg-3 col-md-3 col-sm-12">
-             
-                <h3 className="card-title h5 fw-bold mb-3">
-                  Doctor Management
-                </h3>
-                <p className="card-text mb-4">
-                  Doctors can log in to view their schedules, manage
-                  appointments, and interact with patients.
-                </p>
-                <Link to="/login" className="btn btn-primary mt-auto">
-                  Login Here
-                </Link>
-              
-            </div>
-            <div className="col-lg-3 col-md-3 col-sm-12">
-             
-                <h3 className="card-title h5 fw-bold mb-3">
-                  Admin Management
-                </h3>
-                <p className="card-text mb-4">
-                  Admins can manage hospital operations, users, and monitor
-                  activities across departments.
-                </p>
-                <Link to="/login" className="btn btn-primary mt-auto">
-                  Login Here
-                </Link>
-              
-            </div>
-      </div>
+      {/* Doctors Profiles Section */}
+      <section className="doctors-section py-5" id="doctors">
+        <div className="container">
+          <motion.div
+            className="section-header text-center mb-5"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isVisible.doctors ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="section-title">Our Specialist Doctors</h2>
+            <p className="section-subtitle">Expert healthcare professionals dedicated to your wellbeing</p>
+          </motion.div>
+
+          <div className="row g-4">
+            {doctors.map((doctor, index) => (
+              <div className="col-lg-3 col-md-6" key={doctor.id}>
+                <motion.div
+                  className="doctor-card"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isVisible.doctors ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ duration: 0.8, delay: index * 0.2 }}
+                  whileHover={{ y: -10, boxShadow: "0 12px 24px rgba(0, 0, 0, 0.15)" }}
+                >
+                  <div className="doctor-image-container">
+                    <img src={image1 || "/placeholder.svg"} alt={doctor.name} className="doctor-image" />
+                  </div>
+                  <div className="doctor-info">
+                    <h3 className="doctor-name">{doctor.name}</h3>
+                    <p className="doctor-specialty">{doctor.specialty}</p>
+                    <p className="doctor-experience">{doctor.experience} Experience</p>
+                    <div className="doctor-rating">
+                      <span className="rating-value">{doctor.rating}</span>
+                      <div className="stars">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className={`star ${i < Math.floor(doctor.rating) ? "filled" : ""}`} size={16} />
+                        ))}
+                      </div>
+                    </div>
+                    <Link to={`/DoctorProfile ${doctor.id}`} className="btn btn-outline-primary btn-sm view-profile">
+                      View Profile <ArrowRight size={16} />
+                    </Link>
+                  </div>
+                </motion.div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-5">
+            <Link to="/doctors" className="btn btn-primary">
+              View All Doctors
+            </Link>
+          </div>
+        </div>
+      </section>
+
+            {/* Testimonials Section */}
+            <section className="testimonials-section py-5" id="testimonials">
+        <div className="container">
+          <motion.div
+            className="section-header text-center mb-5"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isVisible.testimonials ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="section-title">Patient Testimonials</h2>
+            <p className="section-subtitle">What our patients say about their experience</p>
+          </motion.div>
+
+          <div className="testimonial-carousel">
+            <button className="carousel-control prev" onClick={prevTestimonial} aria-label="Previous testimonial">
+              <ChevronLeft size={24} />
+            </button>
+
+            <motion.div
+              className="testimonial-container"
+              initial={{ opacity: 0 }}
+              animate={isVisible.testimonials ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              {testimonials.map((testimonial, index) => (
+                <motion.div
+                  key={testimonial.id}
+                  className={`testimonial-card ${index === activeTestimonial ? "active" : ""}`}
+                  initial={{ opacity: 0, x: 100 }}
+                  animate={{
+                    opacity: index === activeTestimonial ? 1 : 0,
+                    x: index === activeTestimonial ? 0 : 100,
+                    display: index === activeTestimonial ? "flex" : "none",
+                  }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <div className="testimonial-content">
+                    <div className="testimonial-text">"{testimonial.text}"</div>
+                    <div className="testimonial-rating">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className={`star ${i < testimonial.rating ? "filled" : ""}`} size={16} />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="testimonial-author">
+                    <img
+                      src={testimonial.image || "/placeholder.svg"}
+                      alt={testimonial.name}
+                      className="testimonial-image"
+                    />
+                    <div className="testimonial-name">{testimonial.name}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <button className="carousel-control next" onClick={nextTestimonial} aria-label="Next testimonial">
+              <ChevronRight size={24} />
+            </button>
+          </div>
+
+          <div className="testimonial-indicators">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                className={`indicator ${index === activeTestimonial ? "active" : ""}`}
+                onClick={() => setActiveTestimonial(index)}
+                aria-label={`Go to testimonial ${index + 1}`}
+              ></button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Sponsors Section */}
+      <section className="sponsors-section py-5" id="sponsors">
+        <div className="container">
+          <motion.div
+            className="section-header text-center mb-5"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isVisible.sponsors ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="section-title">Our Partners</h2>
+            <p className="section-subtitle">Trusted organizations we work with</p>
+          </motion.div>
+
+          <motion.div
+            className="sponsors-container"
+            initial={{ opacity: 0 }}
+            animate={isVisible.sponsors ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            {sponsors.map((sponsor, index) => (
+              <motion.div
+                key={sponsor.id}
+                className="sponsor-item"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isVisible.sponsors ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <img src={sponsor.logo || "/placeholder.svg"} alt={sponsor.name} className="sponsor-logo" />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      
 
       {/* Footer */}
       <footer className="footer text-center py-4 bg-dark text-white">
+
         <div className="container">
-          <p className="mb-0">© 2025 SPEC-LINK. All Rights Reserved.</p>
+
+           <div className="row">
+            <div className="col-md-4 mb-4 mb-md-0">
+              <h4 className="footer-heading">SPEC-LINK</h4>
+              <p className="footer-text">Advanced healthcare management for patients and professionals.</p>
+            </div>
+            <div className="col-md-4 mb-4 mb-md-0">
+              <h4 className="footer-heading">Quick Links</h4>
+              <ul className="footer-links">
+                <li>
+                  <Link to="/about">About Us</Link>
+                </li>
+                <li>
+                  <Link to="/services">Services</Link>
+                </li>
+                <li>
+                  <Link to="/doctors">Doctors</Link>
+                </li>
+                <li>
+                  <Link to="/contact">Contact</Link>
+                </li>
+              </ul>
+            </div>
+            <div className="col-md-4">
+              <h4 className="footer-heading">Contact Us</h4>
+              <p className="footer-text">
+                123 Healthcare Ave, Medical District
+                <br />
+                contact@spec-link.com
+                <br />
+                (555) 123-4567
+              </p>
+            </div>
+          </div>
+          <hr className="footer-divider" />
+          <p className="copyright">© {new Date().getFullYear()} SPEC-LINK. All Rights Reserved.</p>
         </div>
       </footer>
+      {/* end footer */}
     </>
   );
 }

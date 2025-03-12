@@ -12,418 +12,360 @@ import Nav from '../DoctorNav/nav';
 import '../DoctorProfile/docProfile.css'
 
 function DoctorProfile() {
-  const { user } = useContext(AuthContext);
-  const axiosInstance = UseAxios();
-  const { profile, previewImage, setPreviewImage, setProfile, SingleProfile } = useHook();
+  const { id } = useParams()
+  const [doctor, setDoctor] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [selectedDate, setSelectedDate] = useState("")
+  const [selectedTime, setSelectedTime] = useState("")
 
-  const userUrl = `https://speclink-backend.onrender.com/specLink/single_user/${user.user_id}`;
-  const updateUserUrl = `https://speclink-backend.onrender.com/specLink/update_user/${user?.user_id}`;
-  const updateProfileUrl = `https://speclink-backend.onrender.com/specLink/EditProfile/${user?.user_id}`;
-
-  const [showModal, setShowModal] = useState(false);
-  const [dateFormat, setDateFormat] = useState('');
-  const [userData, setUserData] = useState({
-    username: '',
-    first_name: '',
-    last_name: '',
-    is_doctor: false,
-    is_staff: true,
-    is_patient: false,
-    email: '',
-    date_joined: '',
-  });
-  const [update, setUpdate] = useState(false);
-
-  // Format date for display
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
-  };
-
-  // Fetch user data
-  const userDataHandle = async () => {
-    try {
-      const response = await axios.get(userUrl);
-      const data = response.data;
-      const formattedDate = formatDate(data.date_joined);
-      setDateFormat(formattedDate);
-      setUserData(data);
-    } catch (err) {
-      console.error('Error fetching user data:', err);
-      Swal.fire({
-        title: 'Error',
-        text: 'Failed to load user data.',
-        icon: 'error',
-        timer: 2000,
-      });
-    }
-  };
-
+  // Mock data - in a real app, you would fetch this from an API
   useEffect(() => {
-    if (user?.user_id) userDataHandle();
-  }, [user?.user_id]);
+    // Simulate API call
+    setTimeout(() => {
+      setDoctor({
+        id: 1,
+        name: "Dr. Sarah Johnson",
+        specialty: "Cardiology",
+        experience: "15+ years",
+        image: "/placeholder.svg?height=400&width=400",
+        rating: 4.9,
+        bio: "Dr. Sarah Johnson is a board-certified cardiologist with over 15 years of experience in diagnosing and treating heart conditions. She specializes in preventive cardiology, heart failure management, and cardiac rehabilitation.",
+        education: [
+          { degree: "MD", institution: "Harvard Medical School", year: "2005" },
+          { degree: "Residency", institution: "Massachusetts General Hospital", year: "2009" },
+          { degree: "Fellowship", institution: "Cleveland Clinic", year: "2011" },
+        ],
+        certifications: [
+          "American Board of Internal Medicine - Cardiovascular Disease",
+          "Advanced Cardiac Life Support (ACLS)",
+          "Fellow of the American College of Cardiology (FACC)",
+        ],
+        location: "123 Medical Center Dr, Suite 300, Healthcare City",
+        phone: "(555) 123-4567",
+        email: "dr.johnson@speclink.com",
+        availableDates: [
+          { date: "2025-03-15", times: ["9:00 AM", "11:30 AM", "2:00 PM", "4:30 PM"] },
+          { date: "2025-03-16", times: ["10:00 AM", "1:00 PM", "3:30 PM"] },
+          { date: "2025-03-17", times: ["9:30 AM", "12:00 PM", "2:30 PM", "5:00 PM"] },
+        ],
+        reviews: [
+          {
+            id: 1,
+            name: "Jennifer L.",
+            rating: 5,
+            comment:
+              "Dr. Johnson is an excellent cardiologist. She took the time to explain my condition and treatment options thoroughly.",
+            date: "2025-02-10",
+          },
+          {
+            id: 2,
+            name: "Robert M.",
+            rating: 5,
+            comment: "Very professional and knowledgeable. The office staff is also friendly and efficient.",
+            date: "2025-01-25",
+          },
+          {
+            id: 3,
+            name: "David K.",
+            rating: 4,
+            comment: "Dr. Johnson provided great care and follow-up. Would recommend to anyone with heart concerns.",
+            date: "2025-01-15",
+          },
+        ],
+      })
+      setLoading(false)
+    }, 1000)
+  }, [id])
 
-  // Handle image change
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
-    if (selectedImage) {
-      setProfile({ ...profile, profile_picture: selectedImage });
-      setPreviewImage(URL.createObjectURL(selectedImage));
-    }
-  };
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value)
+    setSelectedTime("")
+  }
 
-//   handle profiel
-const handleProfile = (e)=>{
-    setProfile({
-        ...profile, [e.target.name]: e.target.value
-    })
-}
+  const handleTimeChange = (e) => {
+    setSelectedTime(e.target.value)
+  }
 
-  // Handle user input change
-  const handleUser = (e) => {
-    setUserData({
-      ...userData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleBookAppointment = (e) => {
+    e.preventDefault()
+    // Handle appointment booking logic
+    console.log("Appointment booked:", { doctorId: doctor.id, date: selectedDate, time: selectedTime })
+    alert(`Appointment booked with ${doctor.name} on ${selectedDate} at ${selectedTime}`)
+  }
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setUpdate(true);
-
-    const userFormData = new FormData();
-    const profileFormData = new FormData();
-
-    // Append user data
-    userFormData.append('username', userData.username);
-    userFormData.append('email', userData.email);
-    userFormData.append('is_doctor', userData.is_doctor);
-    userFormData.append('is_patient', userData.is_patient);
-    userFormData.append('is_staff', userData.is_staff);
-    userFormData.append('first_name', userData.first_name);
-    userFormData.append('last_name', userData.last_name);
-    userFormData.append('date_joined', userData.date_joined);
-
-    // Append profile data
-    profileFormData.append('address', profile.address || '');
-    profileFormData.append('specialization', profile.specialization);
-    // profileFormData.append('license_number', profile.license_number || '');
-    profileFormData.append('years_of_experience', profile.years_of_experience)
-    profileFormData.append('date_of_birth', profile.date_of_birth || '')
-
-    // Append profile_picture only if it’s a File object (new upload)
-    if (profile.profile_picture && profile.profile_picture instanceof File) {
-      profileFormData.append('profile_picture', profile.profile_picture);
-    }
-
-    try {
-      const userResponse = await axiosInstance.put(updateUserUrl, userFormData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      const profileResponse = await axiosInstance.put(updateProfileUrl, profileFormData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      if (userResponse.status === 201 && profileResponse.status === 200) {
-        await SingleProfile(); // Refresh profile data
-        showSuccessAlert('Profile Updated');
-        setShowModal(false);
-        setUpdate(false);
-      }
-    } catch (err) {
-      console.error('Error updating profile:', err.response?.data || err);
-      Swal.fire({
-        title: 'Error',
-        text: err.response?.data?.profile_picture?.[0] || 'Failed to update profile.',
-        icon: 'error',
-        timer: 2000,
-      });
-    } finally {
-      setUpdate(false);
-    }
-  };
-
-  const showSuccessAlert = (message) => {
-    Swal.fire({
-      title: message,
-      icon: 'success',
-      timer: 2000,
-    });
-  };
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <p>Loading doctor profile...</p>
+      </div>
+    )
+  }
 
   return (
-    <>
-    <Nav/>
-      <div className="container-fluid bg-white p-4">
-        <div className="user_profile_wrapper ">
-        <div className="profile user_prof d-flex mt-3 p-2">
-          <div className="pic">
-            <div className="pic_avater">
-              <Avatar
-                alt={userData.first_name}
-                src={
-                  previewImage
-                    ? `https://speclink-backend.onrender.com${previewImage}`
-                    : profile.profile_picture
-                    ? `https://speclink-backend.onrender.com${profile.profile_picture}`
-                    : ''
-                }
-              />
-            </div>
-            <div className="pic_email">
-              <span>
-                <strong>{userData.email}</strong>
-              </span>
-              <span>{moment(userData.date_joined).fromNow()}</span>
-            </div>
+    <div className="page-container">
+      {/* Navbar */}
+      <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div className="container">
+          <a className="navbar-brand d-flex align-items-center" href="#">
+            <span className="brand-logo me-2">SL</span>
+            <span className="brand-text">SPEC-LINK</span>
+          </a>
+          <div className="ms-auto">
+            <a href="/signup" className="btn btn-light btn-sm">
+              Sign Up
+            </a>
           </div>
-          <button
-            className="ms-auto btn btn-success p-2 text-white"
-            onClick={() => setShowModal(true)}
-          >
-            Edit
-          </button>
         </div>
+      </nav>
 
-        <form className="mt-4 profile_form">
-          <div className="mb-3">
-            <label htmlFor="firstName" className="form-label">
-              First Name
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="firstName"
-              value={userData.first_name}
-              readOnly
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="lastName" className="form-label">
-              Last Name
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="lastName"
-              value={userData.last_name}
-              readOnly
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="email"
-              value={userData.email}
-              readOnly
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="username" className="form-label">
-              Username
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="username"
-              value={userData.username}
-              readOnly
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="dateJoined" className="form-label">
-              Date Joined
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="dateJoined"
-              value={dateFormat}
-              readOnly
-            />
-          </div>
+      {/* Doctor Profile Section */}
+      <section className="doctor-profile-section">
+        <div className="container">
+          <Link to="/doctors" className="back-link">
+            <ArrowLeft size={16} /> Back to Doctors
+          </Link>
 
-          <div className="mb-3">
-            <label htmlFor="dateJoined" className="form-label">
-              Specializations
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="dateJoined"
-              value={profile.specialization}
-              placeholder='specialization....'
-              readOnly
-            />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="dateJoined" className="form-label">
-             Years of Experience
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="dateJoined"
-              value={profile.years_of_experience}
-              placeholder='experience.....'
-              readOnly
-            />
-          </div>
-        </form>
-        </div>
-       
-      </div>
-
-      {/* Update Profile Modal */}
-      {showModal && (
-        <div className="custom-modal-overlay">
-          <div className="custom-modal">
-            <div className="custom-modal-header">
-              <h5 className="custom-modal-title">Update Profile</h5>
-              <button
-                type="button"
-                className="close"
-                onClick={() => setShowModal(false)}
+          <div className="row">
+            <div className="col-lg-4">
+              <motion.div
+                className="doctor-profile-sidebar"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
               >
-                ×
-              </button>
+                <div className="doctor-profile-image-container">
+                  <img src={doctor.image || "/placeholder.svg"} alt={doctor.name} className="doctor-profile-image" />
+                </div>
+
+                <div className="doctor-profile-info">
+                  <h1 className="doctor-profile-name">{doctor.name}</h1>
+                  <p className="doctor-profile-specialty">{doctor.specialty}</p>
+                  <p className="doctor-profile-experience">{doctor.experience} Experience</p>
+
+                  <div className="doctor-profile-rating">
+                    <div className="stars">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className={`star ${i < Math.floor(doctor.rating) ? "filled" : ""}`} size={16} />
+                      ))}
+                    </div>
+                    <span className="rating-value">{doctor.rating}</span>
+                  </div>
+
+                  <div className="doctor-profile-contact">
+                    <div className="contact-item">
+                      <MapPin size={16} />
+                      <span>{doctor.location}</span>
+                    </div>
+                    <div className="contact-item">
+                      <Phone size={16} />
+                      <span>{doctor.phone}</span>
+                    </div>
+                    <div className="contact-item">
+                      <Mail size={16} />
+                      <span>{doctor.email}</span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             </div>
-            <div className="custom-modal-body">
-              <form onSubmit={handleSubmit}>
-                <div className="user_profile">
-                  <div className="photo">
-                    <span>Photo</span>
-                    <Avatar
-                      alt={userData.first_name}
-                      src={
-                        previewImage
-                          ? previewImage
-                          : profile.profile_picture
-                          ? `https://speclink-backend.onrender.com${profile.profile_picture}`
-                          : ''
-                      }
-                      className="profile"
-                    />
+
+            <div className="col-lg-8">
+              <motion.div
+                className="doctor-profile-content"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <div className="doctor-profile-tabs">
+                  <ul className="nav nav-tabs" id="doctorProfileTabs" role="tablist">
+                    <li className="nav-item" role="presentation">
+                      <button
+                        className="nav-link active"
+                        id="about-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#about"
+                        type="button"
+                        role="tab"
+                        aria-controls="about"
+                        aria-selected="true"
+                      >
+                        <User size={16} /> About
+                      </button>
+                    </li>
+                    <li className="nav-item" role="presentation">
+                      <button
+                        className="nav-link"
+                        id="education-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#education"
+                        type="button"
+                        role="tab"
+                        aria-controls="education"
+                        aria-selected="false"
+                      >
+                        <Award size={16} /> Education
+                      </button>
+                    </li>
+                    <li className="nav-item" role="presentation">
+                      <button
+                        className="nav-link"
+                        id="reviews-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#reviews"
+                        type="button"
+                        role="tab"
+                        aria-controls="reviews"
+                        aria-selected="false"
+                      >
+                        <Star size={16} /> Reviews
+                      </button>
+                    </li>
+                  </ul>
+
+                  <div className="tab-content" id="doctorProfileTabsContent">
+                    <div className="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                      <div className="doctor-profile-bio">
+                        <h3>Biography</h3>
+                        <p>{doctor.bio}</p>
+                      </div>
+
+                      <div className="doctor-profile-certifications">
+                        <h3>Certifications</h3>
+                        <ul>
+                          {doctor.certifications.map((cert, index) => (
+                            <li key={index}>
+                              <FileText size={16} />
+                              <span>{cert}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div className="tab-pane fade" id="education" role="tabpanel" aria-labelledby="education-tab">
+                      <div className="doctor-profile-education">
+                        <h3>Education & Training</h3>
+                        <div className="education-timeline">
+                          {doctor.education.map((edu, index) => (
+                            <div key={index} className="education-item">
+                              <div className="education-year">{edu.year}</div>
+                              <div className="education-content">
+                                <h4>{edu.degree}</h4>
+                                <p>{edu.institution}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                      <div className="doctor-profile-reviews">
+                        <h3>Patient Reviews</h3>
+                        <div className="reviews-list">
+                          {doctor.reviews.map((review) => (
+                            <div key={review.id} className="review-item">
+                              <div className="review-header">
+                                <div className="review-author">
+                                  <div className="review-avatar">{review.name.charAt(0)}</div>
+                                  <div className="review-meta">
+                                    <h4>{review.name}</h4>
+                                    <span className="review-date">{review.date}</span>
+                                  </div>
+                                </div>
+                                <div className="review-rating">
+                                  {[...Array(5)].map((_, i) => (
+                                    <Star key={i} className={`star ${i < review.rating ? "filled" : ""}`} size={14} />
+                                  ))}
+                                </div>
+                              </div>
+                              <div className="review-content">
+                                <p>{review.comment}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="actions">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      id="profile_image"
-                      hidden
-                      onChange={handleImageChange}
-                    />
-                    <label htmlFor="profile_image">
-                      <i className="bi bi-pen-fill text-primary"> Update Photo</i>
-                    </label>
-                    <p>Recommended: JPG, PNG, or GIF</p>
-                  </div>
                 </div>
 
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    name="email"
-                    value={userData.email}
-                    onChange={handleUser}
-                  />
-                </div>
+                <motion.div
+                  className="appointment-booking-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  <h3>Book an Appointment</h3>
+                  <form onSubmit={handleBookAppointment}>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label>
+                            <Calendar size={16} /> Select Date
+                          </label>
+                          <select value={selectedDate} onChange={handleDateChange} required className="form-select">
+                            <option value="">Choose a date</option>
+                            {doctor.availableDates.map((dateObj, index) => (
+                              <option key={index} value={dateObj.date}>
+                                {new Date(dateObj.date).toLocaleDateString("en-US", {
+                                  weekday: "long",
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                })}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
 
-                <div className="mb-3">
-                  <label htmlFor="username" className="form-label">
-                    Username
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="username"
-                    name="username"
-                    value={userData.username}
-                    onChange={handleUser}
-                  />
-                </div>
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label>
+                            <Clock size={16} /> Select Time
+                          </label>
+                          <select
+                            value={selectedTime}
+                            onChange={handleTimeChange}
+                            required
+                            disabled={!selectedDate}
+                            className="form-select"
+                          >
+                            <option value="">Choose a time</option>
+                            {selectedDate &&
+                              doctor.availableDates
+                                .find((d) => d.date === selectedDate)
+                                ?.times.map((time, index) => (
+                                  <option key={index} value={time}>
+                                    {time}
+                                  </option>
+                                ))}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
 
-                <div className="mb-3">
-                  <label htmlFor="firstName" className="form-label">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="firstName"
-                    name="first_name"
-                    value={userData.first_name}
-                    onChange={handleUser}
-                    placeholder="Enter first name..."
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="lastName" className="form-label">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="lastName"
-                    name="last_name"
-                    value={userData.last_name}
-                    onChange={handleUser}
-                    placeholder="Enter last name..."
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="lastName" className="form-label">
-                    specialization
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="lastName"
-                    name="specialization"
-                    value={profile.specialization}
-                    onChange={handleProfile}
-                    placeholder="Enter last name..."
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="lastName" className="form-label">
-                    years of experience
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="lastName"
-                    name="years_of_experience"
-                    value={profile.years_of_experience}
-                    onChange={handleProfile}
-                    placeholder="Enter last name..."
-                  />
-                </div>
-
-                <button type="submit" className="update_profile btn btn-primary" disabled={update}>
-                  {update ? 'Updating...' : 'Update'}
-                </button>
-              </form>
+                    <button type="submit" className="book-appointment-button" disabled={!selectedDate || !selectedTime}>
+                      Book Appointment
+                    </button>
+                  </form>
+                </motion.div>
+              </motion.div>
             </div>
           </div>
         </div>
-      )}
-    </>
-  );
+      </section>
+
+      {/* Footer */}
+      <footer className="footer text-center py-4">
+        <div className="container">
+          <p className="copyright">© {new Date().getFullYear()} SPEC-LINK. All Rights Reserved.</p>
+        </div>
+      </footer>
+    </div>
+  )
 }
 
-export default DoctorProfile;
+export default DoctorProfile
