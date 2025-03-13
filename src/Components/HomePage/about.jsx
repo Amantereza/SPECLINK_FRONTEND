@@ -144,13 +144,13 @@ export default function AboutPage() {
       <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
         <div className="container">
           <a className="navbar-brand d-flex align-items-center" href="/">
-            <span className="brand-logo me-2">SL</span>
+            {/* <span className="brand-logo me-2">SL</span> */}
             <span className="brand-text">SPEC-LINK</span>
           </a>
           <div className="ms-auto">
-            <a href="/doctor/register" className="btn btn-light btn-sm">
+            <Link to="registration" className="btn btn-light btn-sm">
               Doctor Registration
-            </a>
+            </Link>
           </div>
         </div>
       </nav>
@@ -194,7 +194,10 @@ export default function AboutPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <img src="/placeholder.svg?height=500&width=600" alt="Healthcare professionals" />
+                <img
+                    src="../Images/doctor.png"
+                    alt="Healthcare professionals"
+                />
               </motion.div>
             </div>
           </div>

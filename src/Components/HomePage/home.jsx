@@ -144,9 +144,9 @@ function Home() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <a className="nav-link" href="#aboutUs">
+                <Link className="nav-link" to="about">
                   About Us
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#doctors">
