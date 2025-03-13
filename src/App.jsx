@@ -28,6 +28,7 @@ import AboutPage from './Components/HomePage/about';
 import DoctorRegistration from './Components/HomePage/registration';
 import ViewDoctors from './Components/HomePage/viewdoctors';
 import DoctorProfilePage from './Components/HomePage/viewProfile';
+import TeamPage from './Components/Doctor/DoctorNav/team/team';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route path="/registration" element={<DoctorRegistration />} />
           <Route path="/viewdoctors" element={<ViewDoctors />} />
           <Route path="/viewProfile" element={<DoctorProfilePage />} />
+          <Route path="/team" element={<TeamPage />} />
           {/* Parent route for the admin dashboard */}
           <Route path="/dashboard" element={<DashboardLayoutBasic />}>
             <Route index element={<Content />} />
