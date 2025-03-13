@@ -1,0 +1,807 @@
+/* Doctor Profile Page Styles */
+.doctor-profile-page {
+    padding-top: 70px;
+    background-color: #f8f9fa;
+  }
+  
+  /* Back Link */
+  .back-link {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-weight: 500;
+  }
+  
+  .back-link:hover {
+    color: #6a11cb;
+  }
+  
+  /* Doctor Profile Card */
+  .doctor-profile-card {
+    background-color: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    height: 100%;
+  }
+  
+  .doctor-profile-image-container {
+    height: 300px;
+    overflow: hidden;
+  }
+  
+  .doctor-profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .doctor-profile-info {
+    padding: 1.5rem;
+  }
+  
+  .doctor-profile-name {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+  
+  .doctor-profile-specialty {
+    font-size: 1.1rem;
+    color: #6a11cb;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+  
+  .doctor-profile-subspecialty {
+    font-size: 0.95rem;
+    color: #777;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  
+  /* Rating */
+  .doctor-profile-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .stars {
+    display: flex;
+    margin-right: 0.5rem;
+  }
+  
+  .star {
+    color: #ddd;
+    margin-right: 2px;
+  }
+  
+  .star.filled {
+    color: #ffc107;
+  }
+  
+  .rating-value {
+    font-weight: 700;
+    margin-right: 0.25rem;
+    color: #333;
+  }
+  
+  .rating-count {
+    font-size: 0.9rem;
+    color: #777;
+  }
+  
+  /* Statistics */
+  .doctor-profile-statistics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+  }
+  
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3498db, #6a11cb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    margin-bottom: 0.75rem;
+  }
+  
+  .stat-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .stat-value {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+    color: #777;
+  }
+  
+  /* Contact */
+  .doctor-profile-contact {
+    margin-top: 1.5rem;
+  }
+  
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .contact-item svg {
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  
+  /* Book Appointment Button */
+  .book-appointment-button {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #3498db, #6a11cb);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .book-appointment-button:hover {
+    background: linear-gradient(135deg, #2980b9, #5a0db2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+  }
+  
+  /* Tabs */
+  .doctor-profile-tabs {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .profile-tabs {
+    display: flex;
+    overflow-x: auto;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .profile-tab {
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    color: #666;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  
+  .profile-tab:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(135deg, #3498db, #6a11cb);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .profile-tab.active {
+    color: #6a11cb;
+  }
+  
+  .profile-tab.active:after {
+    transform: scaleX(1);
+  }
+  
+  .profile-tab-content {
+    padding: 2rem;
+  }
+  
+  /* Section Styles */
+  .profile-section {
+    margin-bottom: 2.5rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    color: #333;
+    position: relative;
+    padding-bottom: 0.75rem;
+  }
+  
+  .section-title:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #3498db, #6a11cb);
+    border-radius: 3px;
+  }
+  
+  .section-content {
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  /* Specializations */
+  .specializations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .specialization-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .specialty-icon {
+    color: #6a11cb;
+  }
+  
+  /* Hospital List */
+  .hospital-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .hospital-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    color: #666;
+  }
+  
+  .hospital-icon {
+    color: #6a11cb;
+  }
+  
+  /* Insurance Grid */
+  .insurance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  
+  .insurance-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .insurance-icon {
+    color: #3498db;
+  }
+  
+  /* Education Timeline */
+  .education-timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+  
+  .education-timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, #3498db, #6a11cb);
+  }
+  
+  .education-item {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+  
+  .education-item::before {
+    content: "";
+    position: absolute;
+    left: -2rem;
+    top: 5px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #6a11cb;
+    z-index: 1;
+  }
+  
+  .education-year {
+    font-weight: 700;
+    color: #6a11cb;
+    margin-bottom: 0.5rem;
+  }
+  
+  .education-content h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #333;
+  }
+  
+  .education-content p {
+    color: #666;
+    margin-bottom: 0;
+  }
+  
+  /* Certifications */
+  .certifications-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .certification-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    color: #666;
+  }
+  
+  /* Awards */
+  .awards-list {
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .award-item {
+    display: flex;
+    gap: 1rem;
+    background-color: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 10px;
+  }
+  
+  .award-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3498db, #6a11cb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  
+  .award-content h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #333;
+  }
+  
+  .award-content p {
+    color: #666;
+    margin-bottom: 0;
+  }
+  
+  /* Publications */
+  .publications-list {
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .publication-item {
+    display: flex;
+    gap: 1rem;
+    background-color: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 10px;
+  }
+  
+  .publication-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3498db, #6a11cb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  
+  .publication-content h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #333;
+  }
+  
+  .publication-content p {
+    color: #666;
+    margin-bottom: 0;
+  }
+  
+  /* Reviews */
+  .reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  
+  .overall-rating {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .overall-rating h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .overall-rating p {
+    color: #666;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+  }
+  
+  .reviews-list {
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .review-item {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+  }
+  
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  
+  .review-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .review-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #6a11cb;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+  
+  .review-meta h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #333;
+  }
+  
+  .review-date {
+    font-size: 0.85rem;
+    color: #777;
+  }
+  
+  .review-content p {
+    margin: 0;
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  /* Appointment Modal */
+  .appointment-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+  
+  .appointment-modal {
+    width: 100%;
+    max-width: 550px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+  
+  .appointment-modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .appointment-modal-header h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+  }
+  
+  .close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #777;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+  }
+  
+  .appointment-modal-body {
+    padding: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .form-icon {
+    color: #6a11cb;
+  }
+  
+  .form-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #fff;
+  }
+  
+  .form-select:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.2);
+    outline: none;
+  }
+  
+  .form-select:disabled {
+    background-color: #f8f9fa;
+    opacity: 0.7;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .btn-cancel,
+  .btn-book {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-cancel {
+    background-color: #f8f9fa;
+    color: #666;
+    border: 1px solid #ddd;
+  }
+  
+  .btn-book {
+    background: linear-gradient(135deg, #3498db, #6a11cb);
+    color: #fff;
+    border: none;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #eee;
+  }
+  
+  .btn-book:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2980b9, #5a0db2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+  }
+  
+  .btn-book:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 992px) {
+    .doctor-profile-image-container {
+      height: 250px;
+    }
+  
+    .reviews-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .profile-tabs {
+      justify-content: flex-start;
+    }
+  
+    .profile-tab {
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+    }
+  
+    .profile-tab-content {
+      padding: 1.5rem;
+    }
+  
+    .section-title {
+      font-size: 1.3rem;
+    }
+  
+    .specializations-grid,
+    .insurance-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+  
+    .doctor-profile-statistics {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+  
+    .stat-item {
+      padding: 0.75rem;
+    }
+  
+    .stat-icon {
+      width: 35px;
+      height: 35px;
+    }
+  
+    .stat-value {
+      font-size: 1rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .doctor-profile-statistics {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  
+    .doctor-profile-name {
+      font-size: 1.5rem;
+    }
+  
+    .profile-tabs {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  
+    .profile-tab {
+      min-width: auto;
+      flex: 1;
+      white-space: nowrap;
+    }
+  
+    .profile-tab-content {
+      padding: 1.25rem;
+    }
+  
+    .specializations-grid,
+    .insurance-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .review-header {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  
+    .review-rating {
+      align-self: flex-start;
+    }
+  
+    .appointment-modal {
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .appointment-modal-body {
+      flex: 1;
+      overflow-y: auto;
+    }
+  
+    .form-actions {
+      position: sticky;
+      bottom: 0;
+      padding-top: 1rem;
+      background-color: #fff;
+    }
+  }
+  
+  

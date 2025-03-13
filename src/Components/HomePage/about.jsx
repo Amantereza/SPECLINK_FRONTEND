@@ -1,5 +1,4 @@
-"use client"
-
+import React from 'react'
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
@@ -148,9 +147,9 @@ export default function AboutPage() {
             <span className="brand-text">SPEC-LINK</span>
           </a>
           <div className="ms-auto">
-            <Link to="registration" className="btn btn-light btn-sm">
+            <a href="/registration" className="btn btn-light btn-sm">
               Doctor Registration
-            </Link>
+            </a>
           </div>
         </div>
       </nav>
@@ -367,7 +366,7 @@ export default function AboutPage() {
             <h2>Join Our Network of Healthcare Professionals</h2>
             <p>Become part of our growing community of specialists and transform healthcare delivery together.</p>
             <div className="join-buttons">
-              <Link href="/doctor/register" className="btn btn-primary btn-lg">
+              <Link to="/registration" className="btn btn-primary btn-lg">
                 Register as a Doctor
               </Link>
               <Link href="/contact" className="btn btn-outline-light btn-lg">

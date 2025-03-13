@@ -149,7 +149,7 @@ function Home() {
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#doctors">
+                <a className="nav-link" href="/viewdoctors">
                   Doctors
                 </a>
               </li>
@@ -241,7 +241,7 @@ function Home() {
                         ))}
                       </div>
                     </div>
-                    <Link to={`/DoctorProfile ${doctor.id}`} className="btn btn-outline-primary btn-sm view-profile">
+                    <Link to={`/viewProfile ${doctor.id}`} className="btn btn-outline-primary btn-sm view-profile">
                       View Profile <ArrowRight size={16} />
                     </Link>
                   </div>
@@ -251,7 +251,7 @@ function Home() {
           </div>
 
           <div className="text-center mt-5">
-            <Link to="/doctors" className="btn btn-primary">
+            <Link to="/viewdoctors" className="btn btn-primary">
               View All Doctors
             </Link>
           </div>

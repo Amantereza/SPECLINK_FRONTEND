@@ -26,6 +26,8 @@ import ServicesPage from './Components/HomePage/services';
 import ContactPage from './Components/contact/ContactForm';
 import AboutPage from './Components/HomePage/about';
 import DoctorRegistration from './Components/HomePage/registration';
+import ViewDoctors from './Components/HomePage/viewdoctors';
+import DoctorProfilePage from './Components/HomePage/viewProfile';
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
           <Route path="/ContactForm" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/registration" element={<DoctorRegistration />} />
+          <Route path="/viewdoctors" element={<ViewDoctors />} />
+          <Route path="/viewProfile" element={<DoctorProfilePage />} />
           {/* Parent route for the admin dashboard */}
           <Route path="/dashboard" element={<DashboardLayoutBasic />}>
             <Route index element={<Content />} />
