@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { motion} from "framer-motion";
 import { Star, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import image1 from '../Images/doctor.png'
+import img2 from '../Images/nurse.png'
 
 
 function Home() {
@@ -134,17 +135,17 @@ function Home() {
       {/* Navbar */}
       <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
         <div className="container">
-          <a className="navbar-brand fw-bold" href="#">
+          <Link className="navbar-brand fw-bold" to="home">
             SPEC-LINK
-          </a>
+          </Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <a className="nav-link" href="#home">
-                  Home
+                <a className="nav-link" href="#aboutUs">
+                  About Us
                 </a>
               </li>
               <li className="nav-item">
@@ -153,14 +154,14 @@ function Home() {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#testimonials">
-                  Testimonials
+                <a className="nav-link" href="#">
+                  Our Team
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#contact">
+                <Link className="nav-link" to="/ContactForm">
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -226,7 +227,7 @@ function Home() {
                   whileHover={{ y: -10, boxShadow: "0 12px 24px rgba(0, 0, 0, 0.15)" }}
                 >
                   <div className="doctor-image-container">
-                    <img src={image1 || "/placeholder.svg"} alt={doctor.name} className="doctor-image" />
+                    <img src={image1| "/placeholder.svg"} alt={doctor.name} className="doctor-image" />
                   </div>
                   <div className="doctor-info">
                     <h3 className="doctor-name">{doctor.name}</h3>
@@ -303,7 +304,7 @@ function Home() {
                   </div>
                   <div className="testimonial-author">
                     <img
-                      src={testimonial.image || "/placeholder.svg"}
+                      src={img2 || "/placeholder.svg"}
                       alt={testimonial.name}
                       className="testimonial-image"
                     />

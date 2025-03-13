@@ -8,7 +8,7 @@ import moment from 'moment';
 import UseAxios from '../../UseAxios/Token';
 import Swal from 'sweetalert2';
 import Nav from '../DoctorNav/nav';
-
+import '../../HomePage/styles.css';
 import '../DoctorProfile/docProfile.css'
 
 function DoctorProfile() {
@@ -108,7 +108,7 @@ function DoctorProfile() {
       <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
         <div className="container">
           <a className="navbar-brand d-flex align-items-center" href="#">
-            <span className="brand-logo me-2">SL</span>
+            {/* <span className="brand-logo me-2">SL</span> */}
             <span className="brand-text">SPEC-LINK</span>
           </a>
           <div className="ms-auto">

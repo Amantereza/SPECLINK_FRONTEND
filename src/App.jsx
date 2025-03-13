@@ -23,6 +23,7 @@ import PatientProfile from './Components/Patient/PatientProfile/PatientProfile';
 import PatientRecords from './Components/Patient/PatientRecords/PatientRecords';
 import Reports from './Components/Doctor/DoctorReports/Reports';
 import ServicesPage from './Components/HomePage/services';
+import ContactPage from './Components/contact/ContactForm';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/ContactForm" element={<ContactPage />} />
           {/* Parent route for the admin dashboard */}
           <Route path="/dashboard" element={<DashboardLayoutBasic />}>
             <Route index element={<Content />} />
