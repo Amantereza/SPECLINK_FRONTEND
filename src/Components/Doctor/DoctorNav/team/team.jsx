@@ -5,7 +5,6 @@ import { Link } from "react-router-dom"
 import { Github, Linkedin, Twitter, Mail, Code, Database, Palette, Globe } from 'lucide-react'
 import '../team/team.css'
 
-
 export default function TeamPage() {
   const [isVisible, setIsVisible] = useState({
     teamSection: false,
@@ -187,7 +186,7 @@ export default function TeamPage() {
       <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
         <div className="container">
           <a className="navbar-brand d-flex align-items-center" href="/">
-            <span className="brand-logo me-2">SL</span>
+            {/* <span className="brand-logo me-2">SL</span> */}
             <span className="brand-text">SPEC-LINK</span>
           </a>
           <div className="ms-auto">

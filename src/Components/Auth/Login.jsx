@@ -133,7 +133,7 @@ const { setUser} = useContext(AuthContext);
       {loader ? 'Loggin in...' : 'Login'}
     </button>
     <div id="errorMessage" className="error-message" />
-    <p>Arleady have an  account? <Link to='/signup'>Sign up</Link></p>
+    <p>Already have an  account? <Link to='/signup'>Sign up</Link></p>
   </form>
 </div>
     </div>

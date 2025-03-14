@@ -5,12 +5,14 @@ import { useEffect, useState } from "react"
 import { Link } from 'react-router-dom';
 import { motion} from "framer-motion";
 import { Star, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
-import image1 from '../Images/doctor.png'
+import defaultProfile from '../Images/doctor.png'
 import img2 from '../Images/nurse.png'
+import axios from 'axios';
+const list_doctor_profiles = 'https://speclink-backend.onrender.com/specLink/list_doctor_profiles'
 
 
 function Home() {
-
+ const [doctorProfile, setDoctorProfile] = useState([])
   const [activeTestimonial, setActiveTestimonial] = useState(0)
   const [isVisible, setIsVisible] = useState({
     doctors: false,
@@ -18,6 +20,20 @@ function Home() {
     sponsors: false,
   })
 
+  // fetch doctor profiles
+  const fetchProfiles = async()=>{
+    try{
+      const response = await axios(list_doctor_profiles)
+      const data = response.data
+      console.log(data)
+      setDoctorProfile(data)
+    }catch(err){
+      console.log('err', err)
+    }
+  }
+  useEffect(()=>{
+  fetchProfiles()
+  }, [])
    // Animation observer
    useEffect(() => {
     const observerOptions = {
@@ -49,42 +65,6 @@ function Home() {
       })
     }
   }, [])
-
-  // Doctors data
-  const doctors = [
-    {
-      id: 1,
-      name: "Dr. Sarah Johnson",
-      specialty: "Cardiology",
-      experience: "15+ years",
-      image: "/placeholder.svg?height=300&width=300",
-      rating: 4.9,
-    },
-    {
-      id: 2,
-      name: "Dr. Michael Chen",
-      specialty: "Neurology",
-      experience: "12+ years",
-      image: "/placeholder.svg?height=300&width=300",
-      rating: 4.8,
-    },
-    {
-      id: 3,
-      name: "Dr. Emily Rodriguez",
-      specialty: "Pediatrics",
-      experience: "10+ years",
-      image: "/placeholder.svg?height=300&width=300",
-      rating: 4.7,
-    },
-    {
-      id: 4,
-      name: "Dr. James Wilson",
-      specialty: "Orthopedics",
-      experience: "18+ years",
-      image: "/placeholder.svg?height=300&width=300",
-      rating: 4.9,
-    },
-  ]
 
   // Testimonials data
   const testimonials = [
@@ -149,7 +129,7 @@ function Home() {
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/viewdoctors">
+                <a className="nav-link" href="#doctors">
                   Doctors
                 </a>
               </li>
@@ -217,7 +197,7 @@ function Home() {
           </motion.div>
 
           <div className="row g-4">
-            {doctors.map((doctor, index) => (
+            {doctorProfile.slice(0,5).map((doctor, index) => (
               <div className="col-lg-3 col-md-6" key={doctor.id}>
                 <motion.div
                   className="doctor-card"
@@ -227,23 +207,23 @@ function Home() {
                   whileHover={{ y: -10, boxShadow: "0 12px 24px rgba(0, 0, 0, 0.15)" }}
                 >
                   <div className="doctor-image-container">
-                    <img src={image1| "/placeholder.svg"} alt={doctor.name} className="doctor-image" />
+                    <img src={doctor.profile.profile_picture ? doctor.profile.profile_picture : defaultProfile} alt={doctor.profile.profile_picture} className="doctor-image" />
                   </div>
                   <div className="doctor-info">
-                    <h3 className="doctor-name">{doctor.name}</h3>
-                    <p className="doctor-specialty">{doctor.specialty}</p>
-                    <p className="doctor-experience">{doctor.experience} Experience</p>
+                    <h3 className="doctor-name">{doctor.first_name} {doctor.last_name}</h3>
+                    <p className="doctor-specialty">{doctor.profile.specialization}</p>
+                    <p className="doctor-experience">{doctor.profile.years_of_experience} Experience</p>
                     <div className="doctor-rating">
-                      <span className="rating-value">{doctor.rating}</span>
+                      {/* <span className="rating-value">{doctor.rating}</span>
                       <div className="stars">
                         {[...Array(5)].map((_, i) => (
                           <Star key={i} className={`star ${i < Math.floor(doctor.rating) ? "filled" : ""}`} size={16} />
                         ))}
-                      </div>
+                      </div> */}
                     </div>
-                    <Link to={`/viewProfile ${doctor.id}`} className="btn btn-outline-primary btn-sm view-profile">
+                    {/* <Link to={`/DoctorProfile ${doctor.id}`} className="btn btn-outline-primary btn-sm view-profile">
                       View Profile <ArrowRight size={16} />
-                    </Link>
+                    </Link> */}
                   </div>
                 </motion.div>
               </div>
