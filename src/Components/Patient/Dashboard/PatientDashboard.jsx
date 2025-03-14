@@ -3,8 +3,13 @@ import '../Dashboard/dashboard.css';
 import Nav from '../../Doctor/DoctorNav/nav';
 import { AuthContext } from '../../AuthContext/Context';
 import { Link } from 'react-router-dom';
-import useHook from '../../CustomHook/useHook';
 import { useState, useEffect, useRef } from "react"
+import useHook from '../../CustomHook/useHook';
+import axios from 'axios';
+import  Swal from 'sweetalert2'
+
+
+const BASE_URL = 'https://speclink-backend.onrender.com/specLink/'
 
 // Mock data - in a real app, this would come from your API/context
 const mockUser = {
@@ -63,16 +68,18 @@ const timeSlots = [
 function PatientDashboard() {
 
   const { user } = useContext(AuthContext);
+  const { appointments, appointmentLoad, records, fetchAppointment} = useHook();
+  const DOCTOR_LIST_URL = `${BASE_URL}list_doctors`;
+  const POST_APPOINTMENT_URL = `${BASE_URL}post_appointements`;
 
   // State variables
-  const [appointments, setAppointments] = useState(mockAppointments)
-  const [records, setRecords] = useState(mockRecords)
-  const [appointmentLoad, setAppointmentLoad] = useState(false)
   const [activeView, setActiveView] = useState("dashboard")
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [selectedDoctor, setSelectedDoctor] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
+  const [doctorload,setDoctorLoad] = useState(false)
+  const [createAppointment, setCreateAppointment] = useState({ user: user?.user_id, doctor: '', time: '', reason: '', date: '' })
 
   // Chat state
   const [message, setMessage] = useState("")
@@ -92,6 +99,36 @@ function PatientDashboard() {
   const [appointmentDate, setAppointmentDate] = useState("")
   const [appointmentTime, setAppointmentTime] = useState("")
   const [appointmentReason, setAppointmentReason] = useState("")
+  const [doctors, setDoctors] = useState([])
+  const [createLoading, setCreateLoading] = useState(false)
+
+  // Fetch doctors
+  const fetchDoctors = async () => {
+    setDoctorLoad(true);
+    try {
+      const response = await axios.get(DOCTOR_LIST_URL);
+      setDoctors(response.data);
+      console.log(response.data)
+    } catch (err) {
+      console.error('Error fetching doctors:', err);
+      // Swal.fire({
+      //   title: 'Error',
+      //   text: 'Failed to load doctors.',
+      //   icon: 'error',
+      //   timer: 3000,
+      //   toast: true,
+      //   position: 'top',
+      // });
+    } finally {
+      setDoctorLoad(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.user_id) {
+      fetchDoctors();
+    }
+  }, [user?.user_id]);
 
   // Check if mobile
   useEffect(() => {
@@ -103,16 +140,6 @@ function PatientDashboard() {
     window.addEventListener("resize", checkIfMobile)
 
     return () => window.removeEventListener("resize", checkIfMobile)
-  }, [])
-
-  // Simulate loading data
-  useEffect(() => {
-    setAppointmentLoad(true)
-    const timer = setTimeout(() => {
-      setAppointmentLoad(false)
-    }, 1000)
-
-    return () => clearTimeout(timer)
   }, [])
 
   // Auto scroll to bottom of messages
@@ -189,30 +216,69 @@ function PatientDashboard() {
   }
 
   // Handle booking an appointment
-  const handleBookAppointment = () => {
-    if (!appointmentDate || !appointmentTime || !appointmentReason || !selectedDoctor) {
-      alert("Please fill in all required fields")
-      return
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setCreateLoading(true); // Start loading
+    try {
+      const response = await axios.post(POST_APPOINTMENT_URL, createAppointment);
+      if (response.status === 201) {
+        Swal.fire({
+          title: 'Success',
+          text: 'Appointment created successfully!',
+          icon: 'success',
+          timer: 3000,
+          toast: true,
+          position: 'top',
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+
+        // Update appointments state and force table re-render
+        await fetchAppointment();
+        // setTableKey((prev) => prev + 1);
+
+        setShowModal(false);
+        setCreateAppointment({ user: user?.user_id, doctor: '', time: '', reason: '', date: '' });
+      }
+    } catch (err) {
+      console.error('Error creating appointment:', err);
+      Swal.fire({
+        title: 'Error',
+        text: err.response?.data?.message || 'Failed to create appointment.',
+        icon: 'error',
+        timer: 3000,
+        toast: true,
+        position: 'top',
+      });
+    } finally {
+      setCreateLoading(false); // Stop loading
     }
+  };
 
-    const newAppointment = {
-      id: String(appointments.length + 1),
-      doctor: selectedDoctor,
-      date: appointmentDate,
-      time: appointmentTime,
-      reason: appointmentReason,
-      status: "Pending",
-    }
+  // const handleBookAppointment = () => {
+  //   if (!appointmentDate || !appointmentTime || !appointmentReason || !selectedDoctor) {
+  //     alert("Please fill in all required fields")
+  //     return
+  //   }
 
-    setAppointments([...appointments, newAppointment])
-    setShowBookingForm(false)
-    setAppointmentDate("")
-    setAppointmentTime("")
-    setAppointmentReason("")
+  //   const newAppointment = {
+  //     id: String(appointments.length + 1),
+  //     doctor: selectedDoctor,
+  //     date: appointmentDate,
+  //     time: appointmentTime,
+  //     reason: appointmentReason,
+  //     status: "Pending",
+  //   }
 
-    alert(`Appointment with Dr. ${selectedDoctor.first_name} ${selectedDoctor.last_name} booked successfully!`)
-    setActiveView("appointments")
-  }
+  //   setAppointments([...appointments, newAppointment])
+  //   setShowBookingForm(false)
+  //   setAppointmentDate("")
+  //   setAppointmentTime("")
+  //   setAppointmentReason("")
+
+  //   alert(`Appointment with Dr. ${selectedDoctor.first_name} ${selectedDoctor.last_name} booked successfully!`)
+  //   setActiveView("appointments")
+  // }
 
   // Toggle sidebar
   const toggleSidebar = () => {
@@ -278,7 +344,9 @@ function PatientDashboard() {
         <div className="sidebar-footer">
           <button className="logout-button">
             <i className="fas fa-sign-out-alt"></i>
+            <Link to='/patient/logout'>
             <span>Logout</span>
+            </Link>
           </button>
         </div>
       </div>
@@ -387,13 +455,13 @@ function PatientDashboard() {
           <div className="quick-connect-section">
             <h3>Quick Connect</h3>
             <div className="doctors-list">
-              {mockDoctors.map((doctor) => (
+              {doctors.map((doctor) => (
                 <div key={doctor.id} className="doctor-card">
                   <div className="doctor-info">
                     <div className="doctor-avatar">
                       <span>
-                        {doctor.first_name[0]}
-                        {doctor.last_name[0]}
+                        {doctor.first_name}
+                        {doctor.last_name}
                       </span>
                       <span className={`status-indicator ${doctor.status}`}></span>
                     </div>
@@ -529,23 +597,23 @@ function PatientDashboard() {
             <div className="form-section">
               <h3>Select Doctor</h3>
               <div className="doctors-grid">
-                {mockDoctors.map((doctor) => (
+                {doctors.map((doctor) => (
                   <div
                     key={doctor.id}
                     className={`doctor-selection ${selectedDoctor?.id === doctor.id ? "selected" : ""}`}
-                    onClick={() => setSelectedDoctor(doctor)}
+                    onClick={() => setCreateAppointment({...createAppointment, doctor: doctor.id})}
                   >
                     <div className="doctor-avatar">
                       <span>
-                        {doctor.first_name[0]}
-                        {doctor.last_name[0]}
+                        {doctor.first_name}
+                        {doctor.last_name}
                       </span>
                     </div>
                     <div>
                       <h4>
                         Dr. {doctor.first_name} {doctor.last_name}
                       </h4>
-                      <p>{doctor.specialty}</p>
+                      <p>{doctor.profile.specialisation}</p>
                     </div>
                     {selectedDoctor?.id === doctor.id && <i className="fas fa-check selection-check"></i>}
                   </div>
@@ -558,30 +626,29 @@ function PatientDashboard() {
                 <label>Select Date</label>
                 <input
                   type="date"
-                  value={appointmentDate}
-                  onChange={(e) => setAppointmentDate(e.target.value)}
-                  min={new Date().toISOString().split("T")[0]}
+                  name='date'
+                  value={createAppointment.date}
+                  onChange={(e) => setCreateAppointment({...createAppointment, date:e.target.value})}
                 />
               </div>
 
               <div className="form-group">
                 <label>Select Time</label>
-                <select value={appointmentTime} onChange={(e) => setAppointmentTime(e.target.value)}>
-                  <option value="">Select a time slot</option>
-                  {timeSlots.map((slot) => (
-                    <option key={slot} value={slot}>
-                      {slot}
-                    </option>
-                  ))}
-                </select>
+                <input
+                  type="time"
+                  name='time'
+                  value={createAppointment.time}
+                  onChange={(e) => setCreateAppointment({...createAppointment, time:e.target.value})}
+                />
               </div>
 
               <div className="form-group">
                 <label>Reason for Visit</label>
                 <textarea
                   placeholder="Please describe your symptoms or reason for consultation"
-                  value={appointmentReason}
-                  onChange={(e) => setAppointmentReason(e.target.value)}
+                  name='reason'
+                  value={createAppointment.reason}
+                  onChange={(e) => setCreateAppointment({...createAppointment, reason:e.target.value})}
                 ></textarea>
                 <p className="form-hint">This helps the doctor prepare for your appointment</p>
               </div>
@@ -591,7 +658,7 @@ function PatientDashboard() {
               <button className="cancel-button" onClick={() => setShowBookingForm(false)}>
                 Cancel
               </button>
-              <button className="submit-button" onClick={handleBookAppointment}>
+              <button className="submit-button" onClick={handleSubmit}>
                 Book Appointment
               </button>
             </div>
