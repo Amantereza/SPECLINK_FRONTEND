@@ -214,16 +214,16 @@ function Home() {
                     <p className="doctor-specialty">{doctor.profile.specialization}</p>
                     <p className="doctor-experience">{doctor.profile.years_of_experience} Experience</p>
                     <div className="doctor-rating">
-                      {/* <span className="rating-value">{doctor.rating}</span>
+                      <span className="rating-value">{doctor.rating}</span>
                       <div className="stars">
                         {[...Array(5)].map((_, i) => (
                           <Star key={i} className={`star ${i < Math.floor(doctor.rating) ? "filled" : ""}`} size={16} />
                         ))}
-                      </div> */}
+                      </div> 
                     </div>
-                    {/* <Link to={`/DoctorProfile ${doctor.id}`} className="btn btn-outline-primary btn-sm view-profile">
+                    <Link to={`/DoctorProfile ${doctor.id}`} className="btn btn-outline-primary btn-sm view-profile">
                       View Profile <ArrowRight size={16} />
-                    </Link> */}
+                    </Link> 
                   </div>
                 </motion.div>
               </div>
