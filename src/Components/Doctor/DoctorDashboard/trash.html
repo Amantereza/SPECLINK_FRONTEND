@@ -165,4 +165,296 @@ function Dashboard() {
   )
 }
 
-export default Dashboard -->
+export default Dashboard
+
+import { useContext, useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import { Calendar, Clock, MessageSquare, FileText, BarChart3, ChevronRight, Mail, Phone } from "lucide-react"
+import { AuthContext } from "../../AuthContext/Context"
+import useHook from "../../CustomHook/useHook"
+import axios from "axios"
+import '../DoctorDashboard/dashboard.css'
+import Nav from '../DoctorNav/nav'
+
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Skeleton } from "@/components/ui/skeleton"
+
+const BASE_URL = "https://speclink-backend.onrender.com/specLink/"
+
+function Dashboard() {
+  const { user } = useContext(AuthContext)
+  const { patientAppointments, appointLoader } = useHook()
+  const [records, setRecords] = useState([])
+  const LIST_RECORD_URL = `${BASE_URL}list_medical_records`
+
+  // Fetch records
+  const fetchRecords = async () => {
+    try {
+      const response = await axios.get(LIST_RECORD_URL)
+      setRecords(response.data || [])
+    } catch (err) {
+      console.error("Error fetching records:", err)
+    }
+  }
+
+  useEffect(() => {
+    if (user?.user_id) fetchRecords()
+  }, [user?.user_id])
+
+  // Get today's date for the header
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Nav component would be here */}
+      <div className="container mx-auto px-4 py-6">
+        {/* Welcome Header */}
+        <div className="mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Welcome, Dr. {user?.first_name} {user?.last_name} 👋
+              </h1>
+              <p className="text-gray-500 dark:text-gray-400 mt-1">{today}</p>
+            </div>
+            <div className="mt-4 md:mt-0">
+              <Button asChild>
+                <Link to="/doctor/appointments">Schedule Appointment</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Appointments Card */}
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader className="pb-2">
+              <div className="flex justify-between items-center">
+                <Calendar className="h-5 w-5 text-primary" />
+                <Badge variant="outline">{patientAppointments?.length || 0}</Badge>
+              </div>
+              <CardTitle className="text-xl">Appointments</CardTitle>
+              <CardDescription>Manage your schedule</CardDescription>
+            </CardHeader>
+            <CardFooter className="pt-2">
+              <Button variant="ghost" asChild className="w-full justify-between">
+                <Link to="/doctor/appointments">
+                  View Appointments <ChevronRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardFooter>
+          </Card>
+
+          {/* Chat Card */}
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader className="pb-2">
+              <div className="flex justify-between items-center">
+                <MessageSquare className="h-5 w-5 text-primary" />
+                <Badge variant="outline">New</Badge>
+              </div>
+              <CardTitle className="text-xl">Patient Chat</CardTitle>
+              <CardDescription>Connect with patients</CardDescription>
+            </CardHeader>
+            <CardFooter className="pt-2">
+              <Button variant="ghost" asChild className="w-full justify-between">
+                <a href="Dchat.html">
+                  Start Chat <ChevronRight className="h-4 w-4" />
+                </a>
+              </Button>
+            </CardFooter>
+          </Card>
+
+          {/* Records Card */}
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader className="pb-2">
+              <div className="flex justify-between items-center">
+                <FileText className="h-5 w-5 text-primary" />
+                <Badge variant="outline">{records?.length || 0}</Badge>
+              </div>
+              <CardTitle className="text-xl">Patient Records</CardTitle>
+              <CardDescription>Access medical history</CardDescription>
+            </CardHeader>
+            <CardFooter className="pt-2">
+              <Button variant="ghost" asChild className="w-full justify-between">
+                <Link to="/doctor/patient_records">
+                  Manage Records <ChevronRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardFooter>
+          </Card>
+
+          {/* Reports Card */}
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader className="pb-2">
+              <div className="flex justify-between items-center">
+                <BarChart3 className="h-5 w-5 text-primary" />
+                <Badge variant="outline">4</Badge>
+              </div>
+              <CardTitle className="text-xl">Reports</CardTitle>
+              <CardDescription>Analytics and insights</CardDescription>
+            </CardHeader>
+            <CardFooter className="pt-2">
+              <Button variant="ghost" asChild className="w-full justify-between">
+                <Link to="/doctor/reports">
+                  View Reports <ChevronRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+
+        {/* Upcoming Appointments Section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Upcoming Appointments</h2>
+            <Button variant="outline" asChild size="sm">
+              <Link to="/doctor/appointments" className="flex items-center">
+                View All <ChevronRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+
+          {patientAppointments.length === 0 ? (
+            <Card>
+              <CardContent className="flex items-center justify-center py-8">
+                <p className="text-gray-500 dark:text-gray-400">No appointments scheduled</p>
+              </CardContent>
+            </Card>
+          ) : appointLoader ? (
+            <Card>
+              <CardContent className="py-6">
+                <div className="space-y-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="flex items-center space-x-4">
+                      <Skeleton className="h-12 w-12 rounded-full" />
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-[250px]" />
+                        <Skeleton className="h-4 w-[200px]" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gray-50 dark:bg-gray-700 text-left">
+                      <th className="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        Patient
+                      </th>
+                      <th className="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th className="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        Time
+                      </th>
+                      <th className="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {patientAppointments.map((appoint, index) => {
+                      const { user, date, time, status } = appoint
+                      const dateObj = new Date(date)
+                      const formattedDate = dateObj.toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })
+
+                      const getStatusColor = (status) => {
+                        switch (status) {
+                          case "Cancelled":
+                            return "destructive"
+                          case "Completed":
+                            return "success"
+                          default:
+                            return "warning"
+                        }
+                      }
+
+                      return (
+                        <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <Avatar className="h-8 w-8 mr-3">
+                                <AvatarFallback>
+                                  {user.first_name[0]}
+                                  {user.last_name[0]}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <div className="font-medium text-gray-900 dark:text-white">
+                                  {user.first_name} {user.last_name}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <Calendar className="h-4 w-4 mr-2 text-gray-400" />
+                              <span>{formattedDate}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <Clock className="h-4 w-4 mr-2 text-gray-400" />
+                              <span>{time}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <Badge variant={getStatusColor(status)}>{status}</Badge>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Contact & Support</h3>
+              <div className="space-y-2">
+                <div className="flex items-center text-gray-600 dark:text-gray-400">
+                  <Mail className="h-4 w-4 mr-2" />
+                  <span>support@speclink.com</span>
+                </div>
+                <div className="flex items-center text-gray-600 dark:text-gray-400">
+                  <Phone className="h-4 w-4 mr-2" />
+                  <span>+256 123 456 789</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-end justify-start md:justify-end">
+              <p className="text-gray-500 dark:text-gray-400">© 2025 SPEC-LINK | All Rights Reserved</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}
+
+export default Dashboard
+ -->

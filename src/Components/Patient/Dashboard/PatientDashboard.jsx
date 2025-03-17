@@ -7,6 +7,9 @@ import { useState, useEffect, useRef } from "react"
 import useHook from '../../CustomHook/useHook';
 import axios from 'axios';
 import  Swal from 'sweetalert2'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+{/* <Link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"></Link> */}
 
 
 const BASE_URL = 'https://speclink-backend.onrender.com/specLink/'
@@ -80,7 +83,7 @@ function PatientDashboard() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [doctorload,setDoctorLoad] = useState(false)
   const [createAppointment, setCreateAppointment] = useState({ user: user?.user_id, doctor: '', time: '', reason: '', date: '' })
-
+  const [showModal, setShowModal] = useState(false)
   // Chat state
   const [message, setMessage] = useState("")
   const [chatMessages, setChatMessages] = useState([])
